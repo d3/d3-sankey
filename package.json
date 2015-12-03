@@ -1,6 +1,6 @@
 {
   "name": "d3-sankey",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "D3 4.0 implementation of the Sankey plugin",
   "keywords": [
     "d3",
@@ -26,6 +26,7 @@
     "uglify-js": "^2.6.1"
   },
   "dependencies": {
-    "d3-arrays": "^0.4.0"
+    "d3-arrays": "^0.4.0",
+    "d3-interpolate": "^0.2.0"
   }
 }
