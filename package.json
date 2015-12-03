@@ -1,6 +1,6 @@
 {
   "name": "d3-sankey",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "D3 4.0 implementation of the Sankey plugin",
   "keywords": [
     "d3",
