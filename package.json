@@ -1,6 +1,6 @@
 {
   "name": "d3-sankey",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "D3 4.0 implementation of the Sankey plugin",
   "keywords": [
     "d3",
@@ -15,7 +15,7 @@
     "url": "https://github.com/xaranke/d3-sankey.git"
   },
   "scripts": {
-    "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -g d3-arrays:d3_arrays -u d3-sankey -n d3_sankey -o build/d3-sankey.js -- build/bundle.js",
+    "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -g d3-arrays:d3_arrays,d3-interpolate:d3_interpolate -u d3-sankey -n d3_sankey -o build/d3-sankey.js -- build/bundle.js",
     "test": "faucet `find test -name '*-test.js'`",
     "prepublish": "npm run test && uglifyjs build/d3-sankey.js -c -m -o build/d3-sankey.min.js && rm -f build/d3-sankey.zip && zip -j build/d3-sankey.zip -- LICENSE README.md build/d3-sankey.js build/d3-sankey.min.js"
   },
