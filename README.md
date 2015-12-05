@@ -9,7 +9,7 @@ If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release
 ## Demo
 Here is Mike Bostock's famous example [recreated with d3-sankey](http://bl.ocks.org/xaranke/9ada4c74a87b57ae7308).
 
-The dependencies are listed in the [package.json](https://gist.github.com/xaranke/9ada4c74a87b57ae7308#file-package-json) file, so all you need to do to recreate the example is [clone](http://blockbuilder.org/xaranke/9ada4c74a87b57ae7308) or download the block, run `npm install` and then [smush](https://github.com/xaranke/d3smush) your JS together with `d3smush`.
+Clone or download the block, then run `npm install` and `npm run build` to create `d3.min.js`.  
 
 ## API Reference
 
