@@ -1,5 +1,5 @@
-import {sum, nest, ascending, min} from 'd3-arrays';
-import {number} from 'd3-interpolate';
+import {ascending, min, nest, sum} from "d3-arrays";
+import {number} from "d3-interpolate";
 
 export default function() {
   var sankey = {},
