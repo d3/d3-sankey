@@ -10,7 +10,7 @@ import {
   number
 } from 'd3-interpolate';
 
-// Stolen from Mike Bostock's excellent work at http://bost.ocks.org/mike/sankey/sankey.js
+// Stolen from https://github.com/d3/d3-plugins/tree/master/sankey
 
 export default function() {
   var sankey = {},

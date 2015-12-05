@@ -1,10 +1,10 @@
 # d3-sankey
 
-D3 4.0 implementation of the Sankey plugin
+D3 4.0 implementation of the Sankey plugin to visualize the flow between nodes in a directed acyclic network.
 
 ## Installing
 
-If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release](https://github.com/xaranke/d3-sankey/releases/latest).
+If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release](https://github.com/d3/d3-sankey/releases/latest).
 
 ## Demo
 Here is Mike Bostock's famous example [recreated with d3-sankey](http://bl.ocks.org/xaranke/9ada4c74a87b57ae7308).
