@@ -1,7 +1,7 @@
 {
   "name": "d3-sankey",
   "version": "0.2.0",
-  "description": "D3 4.0 implementation of the Sankey plugin",
+  "description": "Visualize flow between nodes in a directed acyclic network.",
   "keywords": [
     "d3",
     "sankey"
@@ -19,14 +19,14 @@
     "test": "faucet `find test -name '*-test.js'`",
     "prepublish": "npm run test && uglifyjs build/d3-sankey.js -c -m -o build/d3-sankey.min.js && rm -f build/d3-sankey.zip && zip -j build/d3-sankey.zip -- LICENSE README.md build/d3-sankey.js build/d3-sankey.min.js"
   },
-  "devDependencies": {
-    "faucet": "^0.0.1",
-    "rollup": "^0.21.1",
-    "tape": "^4.2.2",
-    "uglify-js": "^2.6.1"
-  },
   "dependencies": {
-    "d3-arrays": "^0.4.0",
-    "d3-interpolate": "^0.2.0"
+    "d3-arrays": "~0.4.0",
+    "d3-interpolate": "~0.2.0"
+  },
+  "devDependencies": {
+    "faucet": "0.0",
+    "rollup": "^0.21.1",
+    "tape": "4",
+    "uglify-js": "2"
   }
 }
