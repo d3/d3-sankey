@@ -1,4 +1,4 @@
-import {ascending, min, nest, sum} from "d3-arrays";
+import {ascending, min, nest, sum} from "d3-array";
 import {number} from "d3-interpolate";
 
 export default function() {
