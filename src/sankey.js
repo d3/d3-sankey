@@ -136,13 +136,13 @@ export default function() {
     scaleNodeBreadths((size[0] - nodeWidth) / (x - 1));
   }
 
-  function moveSourcesRight() {
-    nodes.forEach(function(node) {
-      if (!node.targetLinks.length) {
-        node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
-      }
-    });
-  }
+  // function moveSourcesRight() {
+  //   nodes.forEach(function(node) {
+  //     if (!node.targetLinks.length) {
+  //       node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
+  //     }
+  //   });
+  // }
 
   function moveSinksRight(x) {
     nodes.forEach(function(node) {
@@ -193,7 +193,7 @@ export default function() {
     }
 
     function relaxLeftToRight(alpha) {
-      nodesByBreadth.forEach(function(nodes, breadth) {
+      nodesByBreadth.forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.targetLinks.length) {
             var y = sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value);
@@ -295,4 +295,4 @@ export default function() {
   }
 
   return sankey;
-};
+}
