@@ -41,7 +41,7 @@ export default function() {
     return sankey;
   };
 
-  sankey.align = function (_) {
+  sankey.align = function(_) {
     if (!arguments.length) return align;
     align = _.toLowerCase();
     return sankey;
@@ -126,11 +126,11 @@ export default function() {
 
     while (remainingNodes.length) {
       nextNodes = [];
-      remainingNodes.forEach(function (node) {
+      remainingNodes.forEach(function(node) {
         node.x = x;
         node.dx = nodeWidth;
 
-        node[reverse ? 'targetLinks' : 'sourceLinks'].forEach(function (link) {
+        node[reverse ? 'targetLinks' : 'sourceLinks'].forEach(function(link) {
           var nextNode = link[reverse ? 'source' : 'target'];
           if (nextNodes.indexOf(nextNode) < 0) {
             nextNodes.push(nextNode);
