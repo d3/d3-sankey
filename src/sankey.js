@@ -7,6 +7,7 @@ export default function() {
       nodeWidth = 24,
       nodePadding = 8,
       size = [1, 1],
+      align = 'justify', // left, right, center or justify
       nodes = [],
       links = [];
 
@@ -37,6 +38,12 @@ export default function() {
   sankey.size = function(_) {
     if (!arguments.length) return size;
     size = _;
+    return sankey;
+  };
+
+  sankey.align = function (_) {
+    if (!arguments.length) return align;
+    align = _.toLowerCase();
     return sankey;
   };
 
@@ -131,18 +138,22 @@ export default function() {
       ++x;
     }
 
-    //
-    moveSinksRight(x);
+    if (align === 'right' || align === 'center') {
+      moveSourcesRight();
+    }
+    if (align === 'right' || align === 'justify') {
+      moveSinksRight(x);
+    }
     scaleNodeBreadths((size[0] - nodeWidth) / (x - 1));
   }
 
-  // function moveSourcesRight() {
-  //   nodes.forEach(function(node) {
-  //     if (!node.targetLinks.length) {
-  //       node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
-  //     }
-  //   });
-  // }
+  function moveSourcesRight() {
+    nodes.forEach(function(node) {
+      if (!node.targetLinks.length) {
+        node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
+      }
+    });
+  }
 
   function moveSinksRight(x) {
     nodes.forEach(function(node) {
