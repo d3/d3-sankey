@@ -160,11 +160,14 @@ export default function() {
   }
 
   function moveSourcesRight() {
-    nodes.forEach(function(node) {
-      if (!node.targetLinks.length) {
-        node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
-      }
-    });
+    nodes.slice()
+      // Pack nodes from right to left
+      .sort(function(a, b) { return b.x - a.x; })
+      .forEach(function(node) {
+        if (!node.targetLinks.length) {
+          node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
+        }
+      });
   }
 
   function moveSinksRight(x) {
