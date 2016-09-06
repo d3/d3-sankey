@@ -6,6 +6,18 @@ D3 4.0 implementation of the Sankey plugin to visualize the flow between nodes i
 
 If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release](https://github.com/d3/d3-sankey/releases/latest).
 
+You can also load directly from unpkg.
+
+```javascript
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://unpkg.com/d3-sankey@0.4.1"></script>
+<script>
+
+var sankey = d3.sankey();
+
+</script>
+```
+
 ## Demo
 Here is Mike Bostock's famous example [recreated with d3-sankey](http://bl.ocks.org/xaranke/9ada4c74a87b57ae7308).
 
