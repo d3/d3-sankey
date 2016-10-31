@@ -4,6 +4,7 @@
   "description": "Visualize flow between nodes in a directed acyclic network.",
   "keywords": [
     "d3",
+    "d3-module",
     "sankey"
   ],
   "author": {
