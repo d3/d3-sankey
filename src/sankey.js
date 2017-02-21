@@ -1,6 +1,6 @@
 import {ascending, min, sum} from "d3-array";
 import {nest} from "d3-collection";
-import {number} from "d3-interpolate";
+import {interpolateNumber} from "d3-interpolate";
 
 export default function() {
   var sankey = {},
@@ -60,7 +60,7 @@ export default function() {
     function link(d) {
       var x0 = d.source.x + d.source.dx,
           x1 = d.target.x,
-          xi = number(x0, x1),
+          xi = interpolateNumber(x0, x1),
           x2 = xi(curvature),
           x3 = xi(1 - curvature),
           y0 = d.source.y + d.sy + d.dy / 2,
