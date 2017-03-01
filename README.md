@@ -64,6 +64,7 @@ Each *node* must be an object. The following properties are assigned by the [San
 * *node*.sourceLinks - the array of outgoing [links](#sankey_links) which have this node as their source
 * *node*.targetLinks - the array of incoming [links](#sankey_links) which have this node as their target
 * *node*.value - the node’s value; the sum of *link*.value for the node’s incoming [links](#sankey_links)
+* *node*.index - the zero-based index of *node* within the array of nodes
 * *node*.x - the node’s horizontal position (derived from the graph topology)
 * *node*.dx - the node’s node width
 * *node*.y - the node’s vertical position
@@ -94,6 +95,7 @@ For convenience, a link’s source and target may be initialized using the zero-
 * *link*.dy - the link’s breadth (proportional to its value)
 * *link*.sy - the link’s vertical starting position (at source node)
 * *link*.ty - the link’s vertical end position (at target node)
+* *link*.index - the zero-based index of *link* within the array of links
 
 <a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L64 "Source")
 

@@ -3,11 +3,11 @@ import {nest} from "d3-collection";
 import constant from "./constant";
 
 function ascendingSourceDepth(a, b) {
-  return a.source.y - b.source.y;
+  return a.source.y - b.source.y || a.index - b.index;
 }
 
 function ascendingTargetDepth(a, b) {
-  return a.target.y - b.target.y;
+  return a.target.y - b.target.y || a.index - b.index;
 }
 
 function ascendingDepth(a, b) {
@@ -92,14 +92,16 @@ export default function() {
   // Populate the sourceLinks and targetLinks for each node.
   // Also, if the source and target are not objects, assume they are indices.
   function computeNodeLinks(graph) {
-    graph.nodes.forEach(function(node) {
+    graph.nodes.forEach(function(node, i) {
+      node.index = i;
       node.sourceLinks = [];
       node.targetLinks = [];
     });
-    graph.links.forEach(function(link) {
+    graph.links.forEach(function(link, i) {
       var source = link.source, target = link.target;
       if (typeof source === "number") source = link.source = graph.nodes[link.source];
       if (typeof target === "number") target = link.target = graph.nodes[link.target];
+      link.index = i;
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     });
