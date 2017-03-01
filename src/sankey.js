@@ -87,11 +87,12 @@ export default function() {
       node.sourceLinks = [];
       node.targetLinks = [];
     });
-    links.forEach(function(link) {
+    links.forEach(function(link, i) {
       var source = link.source,
           target = link.target;
       if (typeof source === "number") source = link.source = nodes[link.source];
       if (typeof target === "number") target = link.target = nodes[link.target];
+      link.originalIndex = i;
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     });
@@ -278,11 +279,11 @@ export default function() {
     });
 
     function ascendingSourceDepth(a, b) {
-      return a.source.y - b.source.y;
+      return (a.source.y - b.source.y) || (a.originalIndex - b.originalIndex);
     }
 
     function ascendingTargetDepth(a, b) {
-      return a.target.y - b.target.y;
+      return (a.target.y - b.target.y) || (a.originalIndex - b.originalIndex);
     }
   }
 
