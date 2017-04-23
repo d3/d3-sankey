@@ -78,7 +78,7 @@ The following properties are assigned to each link by the sankey generator when 
 <a name="sankey_layout" href="#sankey_layout">#</a> <i>sankey</i>.<b>layout</b>(<i>iterations</i>)
 
 Runs the sankey layout algorithm updating the [*sankey*.nodes](#sankey_nodes) and [*sankey*.links](#sankey_links) with their respective layout information and returns this sankey generator.
-<i>iterations</i> is the number of passes to be used for the iterative relaxation algorithm.
+<i>iterations</i> is the number of passes to be used in the iterative relaxation algorithm for node placement.
 
 <a name="sankey_relayout" href="#sankey_relayout">#</a> <i>sankey</i>.<b>relayout</b>()
 
