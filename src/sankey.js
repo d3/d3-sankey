@@ -63,12 +63,19 @@ export default function() {
           xi = interpolateNumber(x0, x1),
           x2 = xi(curvature),
           x3 = xi(1 - curvature),
-          y0 = d.source.y + d.sy + d.dy / 2,
-          y1 = d.target.y + d.ty + d.dy / 2;
-      return "M" + x0 + "," + y0
-           + "C" + x2 + "," + y0
-           + " " + x3 + "," + y1
-           + " " + x1 + "," + y1;
+          y0a = d.source.y + d.sy,
+          y0b = y0a + d.dy,
+          y1a = d.target.y + d.ty,
+          y1b = y1a + d.dy;
+      return "M" + x0 + "," + y0a
+           + "C" + x2 + "," + y0a
+           + " " + x3 + "," + y1a
+           + " " + x1 + "," + y1a
+           + "L" + x1 + "," + y1b
+           + "C" + x3 + "," + y1b
+           + " " + x2 + "," + y0b
+           + " " + x0 + "," + y0b
+           + "Z";
     }
 
     link.curvature = function(_) {
