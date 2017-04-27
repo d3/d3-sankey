@@ -19,9 +19,9 @@ var sankey = d3.sankey();
 ```
 
 ## Demo
-Here is Mike Bostock's famous example [recreated with d3-sankey](http://bl.ocks.org/xaranke/9ada4c74a87b57ae7308).
+Here is Mike Bostock's famous example [recreated with d3-sankey](https://bl.ocks.org/arankek/9ada4c74a87b57ae7308).
 
-Clone or download the block, then run `npm install` and `npm run build` to create `d3.min.js`.  
+Clone or download the block, then run `npm install` and `npm run build` to create `d3.min.js`.
 
 ## API Reference
 
