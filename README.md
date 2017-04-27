@@ -70,6 +70,18 @@ function links() {
 }
 ```
 
+<a name="sankey_align" href="#sankey_align">#</a> <i>sankey</i>.<b>align</b>([<i>align-type</i>])
+
+If <i>align-type</i> (string) is specified, sets the horizontal alignment of the nodes, analogous to the inline [text-align property](http://www.w3schools.com/cssref/pr_text_text-align.asp) in CSS. This defines where the nodes will be placed in the horizontal grid of columns, stacked on the left/right/center or stretched to fill the space (<i>justify</i>). If <i>align-type</i> is not specified, returns the current align type, which defaults to:
+
+```js
+function align() {
+  return 'justify';
+}
+```
+
+Possible values: <i>left</i>, <i>right</i>, <i>center</i> or <i>justify</i>. Here's an [example](http://bl.ocks.org/vasturiano/b0b14f2e58fdeb0da61e62d51c649908).
+
 <a name="sankey_layout" href="#sankey_layout">#</a> <i>sankey</i>.<b>layout</b>([<i>iterations</i>])
 
 Returns the current accessor to the SVG layout object. Here <i>iterations</i> is the number of times the converging function <b>computeNodeDepths</b> is run.

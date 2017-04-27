@@ -7,6 +7,7 @@ export default function() {
       nodeWidth = 24,
       nodePadding = 8,
       size = [1, 1],
+      align = 'justify', // left, right, center or justify
       nodes = [],
       links = [];
 
@@ -37,6 +38,12 @@ export default function() {
   sankey.size = function(_) {
     if (!arguments.length) return size;
     size = _;
+    return sankey;
+  };
+
+  sankey.align = function(_) {
+    if (!arguments.length) return align;
+    align = _.toLowerCase();
     return sankey;
   };
 
@@ -114,16 +121,19 @@ export default function() {
   function computeNodeBreadths() {
     var remainingNodes = nodes,
         nextNodes,
-        x = 0;
+        x = 0,
+        reverse = (align === 'right'); // Reverse traversal direction
 
     while (remainingNodes.length) {
       nextNodes = [];
       remainingNodes.forEach(function(node) {
         node.x = x;
         node.dx = nodeWidth;
-        node.sourceLinks.forEach(function(link) {
-          if (nextNodes.indexOf(link.target) < 0) {
-            nextNodes.push(link.target);
+
+        node[reverse ? 'targetLinks' : 'sourceLinks'].forEach(function(link) {
+          var nextNode = link[reverse ? 'source' : 'target'];
+          if (nextNodes.indexOf(nextNode) < 0) {
+            nextNodes.push(nextNode);
           }
         });
       });
@@ -131,18 +141,34 @@ export default function() {
       ++x;
     }
 
-    //
-    moveSinksRight(x);
+    if (reverse) {
+      // Flip nodes horizontally
+      nodes.forEach(function(node) {
+        node.x *= -1;
+        node.x += x - 1;
+      });
+    }
+
+    if (align === 'center') {
+      moveSourcesRight();
+    }
+    if (align === 'justify') {
+      moveSinksRight(x);
+    }
+
     scaleNodeBreadths((size[0] - nodeWidth) / (x - 1));
   }
 
-  // function moveSourcesRight() {
-  //   nodes.forEach(function(node) {
-  //     if (!node.targetLinks.length) {
-  //       node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
-  //     }
-  //   });
-  // }
+  function moveSourcesRight() {
+    nodes.slice()
+      // Pack nodes from right to left
+      .sort(function(a, b) { return b.x - a.x; })
+      .forEach(function(node) {
+        if (!node.targetLinks.length) {
+          node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
+        }
+      });
+  }
 
   function moveSinksRight(x) {
     nodes.forEach(function(node) {
