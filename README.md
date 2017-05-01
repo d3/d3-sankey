@@ -8,7 +8,7 @@ If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release
 
 You can also load directly from unpkg.
 
-```javascript
+```html
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://unpkg.com/d3-sankey@0"></script>
 <script>
