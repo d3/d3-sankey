@@ -59,7 +59,7 @@ function nodes(graph) {
 
 If *nodes* is specified as a function, the function is invoked when the Sankey layout is [generated](#_sankey), being passed any arguments passed to the Sankey generator. This function must return an array of nodes. If *nodes* is not a function, it must be a constant array of *nodes*.
 
-Each *node* must be an object. The following properties are assigned by the Sankey generator when the [layout is generated](#_sankey):
+Each *node* must be an object. The following properties are assigned by the [Sankey generator](#_sankey):
 
 * *node*.sourceLinks - the array of outgoing [links](#sankey_links) which have this node as their source
 * *node*.targetLinks - the array of incoming [links](#sankey_links) which have this node as their target
@@ -89,7 +89,7 @@ Each *link* must be an object with the following properties:
 * *link*.target - the link’s target [node](#sankey_nodes)
 * *link*.value - the link’s numeric value
 
-For convenience, a link’s source and target may be initialized using the zero-based index of corresponding node in the array of nodes passed to the [Sankey generator](#_sankey) rather than object references. The following properties are assigned to each link by the Sankey generator when the layout is [generated](#_sankey):
+For convenience, a link’s source and target may be initialized using the zero-based index of corresponding node in the array of nodes passed to the [Sankey generator](#_sankey) rather than object references. The following properties are assigned to each link by the [Sankey generator](#_sankey):
 
 * *link*.dy - the link’s breadth (proportional to its value)
 * *link*.sy - the link’s vertical starting position (at source node)
