@@ -1,8 +1,10 @@
 # d3-sankey
 
-Sankey diagrams visualize the directed flow between nodes in an acyclic network.
+Sankey diagrams visualize the directed flow between nodes in an acyclic network. For example, this diagram shows a possible scenario of UK energy production and consumption in 2050:
 
-[<img alt="A possible scenario of UK energy production and consumption in 2050" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="960" height="500">](https://bl.ocks.org/mbostock/ca9a0bb7ba204d12974bca90acc507c0)
+[<img alt="Sankey diagram" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="960" height="500">](https://bl.ocks.org/mbostock/ca9a0bb7ba204d12974bca90acc507c0)
+
+Source: Department of Energy & Climate Change, Tom Counsell.
 
 ## Installing
 
