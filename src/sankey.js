@@ -10,24 +10,24 @@ function ascendingTargetDepth(a, b) {
   return a.target.y - b.target.y;
 }
 
-function value(link) {
-  return link.value;
-}
-
 function ascendingDepth(a, b) {
   return a.y - b.y;
 }
 
-function center(node) {
+function value(d) {
+  return d.value;
+}
+
+function nodeCenter(node) {
   return node.y + node.dy / 2;
 }
 
 function weightedSource(link) {
-  return center(link.source) * link.value;
+  return nodeCenter(link.source) * link.value;
 }
 
 function weightedTarget(link) {
-  return center(link.target) * link.value;
+  return nodeCenter(link.target) * link.value;
 }
 
 function defaultNodes(graph) {
@@ -205,8 +205,7 @@ export default function() {
       nodesByBreadth.forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.targetLinks.length) {
-            var y = sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value);
-            node.y += (y - center(node)) * alpha;
+            node.y += (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
           }
         });
       });
@@ -216,8 +215,7 @@ export default function() {
       nodesByBreadth.slice().reverse().forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.sourceLinks.length) {
-            var y = sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value);
-            node.y += (y - center(node)) * alpha;
+            node.y += (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
           }
         });
       });
