@@ -56,11 +56,10 @@ export default function() {
     return graph;
   }
 
-  // TODO?
-  // sankey.relayout = function(graph) {
-  //   computeLinkDepths(graph);
-  //   return graph;
-  // };
+  sankey.update = function(graph) {
+    computeLinkDepths(graph);
+    return graph;
+  };
 
   sankey.nodeWidth = function(_) {
     return arguments.length ? (dx = +_, sankey) : dx;

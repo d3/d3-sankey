@@ -29,13 +29,35 @@ var sankey = d3.sankey();
 
 Constructs a new Sankey generator with the default settings.
 
-<a href="#_sankey" name="_sankey">#</a> <i>sankey</i>(<i>graph</i>)
+<a href="#_sankey" name="_sankey">#</a> <i>sankey</i>(<i>arguments</i>…)
 
-…
+Computes the node and link positions for the given *arguments*, returning a *graph* representing the Sankey layout. The returned *graph* has the following properties:
+
+* *graph*.nodes - the array of [nodes](#sankey_nodes)
+* *graph*.links - the array of [links](#sankey_links)
+
+<a href="#sankey_update" name="sankey_update">#</a> <i>sankey</i>.<b>update</b>(<i>graph</i>)
+
+Recomputes the specified *graph*’s links’ positions, updating the following properties of each *link*:
+
+* *link*.sy - the link’s vertical starting position (at source node)
+* *link*.ty - the link’s vertical end position (at target node)
+
+This method is intended to be called after computing the initial [Sankey layout](#_sankey), for example when the diagram is repositioned interactively.
 
 <a name="sankey_nodes" href="#sankey_nodes">#</a> <i>sankey</i>.<b>nodes</b>([<i>nodes</i>])
 
-If <i>nodes</i> is specified, sets the Sankey generator’s nodes to the specified array of objects and returns this Sankey generator. If <i>nodes</i> is not specified, returns the current array of nodes, which defaults to the empty array. Each node must be an object. The following properties are assigned by the Sankey generator when the layout is [generated](#_sankey):
+If *nodes* is specified, sets the Sankey generator’s nodes accessor to the specified function or array and returns this Sankey generator. If *nodes* is not specified, returns the current nodes accessor, which defaults to:
+
+```js
+function nodes(graph) {
+  return graph.nodes;
+}
+```
+
+If *nodes* is specified as a function, the function is invoked when the Sankey layout is [generated](#_sankey), being passed any arguments passed to the Sankey generator. This function must return an array of nodes. If *nodes* is not a function, it must be a constant array of *nodes*.
+
+Each *node* must be an object. The following properties are assigned by the Sankey generator when the [layout is generated](#_sankey):
 
 * *node*.sourceLinks - the array of outgoing [links](#sankey_links) which have this node as their source
 * *node*.targetLinks - the array of incoming [links](#sankey_links) which have this node as their target
@@ -49,7 +71,17 @@ See also [*sankey*.links](#sankey_links).
 
 <a name="sankey_links" href="#sankey_links">#</a> <i>sankey</i>.<b>links</b>([<i>links</i>])
 
-If <i>links</i> is specified, sets the Sankey generator’s links to the specified array of objects and returns this Sankey generator. If <i>links</i> is not specified, returns the current array of links, which defaults to the empty array. Each link is an object with the following properties:
+If *links* is specified, sets the Sankey generator’s links accessor to the specified function or array and returns this Sankey generator. If *links* is not specified, returns the current links accessor, which defaults to:
+
+```js
+function links(graph) {
+  return graph.links;
+}
+```
+
+If *links* is specified as a function, the function is invoked when the Sankey layout is [generated](#_sankey), being passed any arguments passed to the Sankey generator. This function must return an array of links. If *links* is not a function, it must be a constant array of *links*.
+
+Each *link* must be an object with the following properties:
 
 * *link*.source - the link’s source [node](#sankey_nodes)
 * *link*.target - the link’s target [node](#sankey_nodes)
@@ -63,15 +95,15 @@ For convenience, a link’s source and target may be initialized using the zero-
 
 <a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>])
 
-If <i>width</i> is specified, sets the node width to the specified number and returns this Sankey generator. If <i>width</i> is not specified, returns the current node width, which defaults to 24.
+If *width* is specified, sets the node width to the specified number and returns this Sankey generator. If *width* is not specified, returns the current node width, which defaults to 24.
 
 <a name="sankey_nodePadding" href="#sankey_nodePadding">#</a> <i>sankey</i>.<b>nodePadding</b>([<i>padding</i>])
 
-If <i>padding</i> is specified, sets the vertical separation between nodes at each column to the specified number and returns this Sankey generator. If <i>padding</i> is not specified, returns the current node padding, which defaults to 8.
+If *padding* is specified, sets the vertical separation between nodes at each column to the specified number and returns this Sankey generator. If *padding* is not specified, returns the current node padding, which defaults to 8.
 
 <a name="sankey_extent" href="#sankey_extent">#</a> <i>sankey</i>.<b>extent</b>([<i>extent</i>])
 
-If *extent* is specified, sets the extent of the Sankey layout to the specified bounds and returns the layout. The *extent* bounds are specified as an array \[\[<i>x0</i>, <i>y0</i>\], \[<i>x1</i>, <i>y1</i>\]\], where <i>x0</i> is the left side of the extent, <i>y0</i> is the top, <i>x1</i> is the right and <i>y1</i> is the bottom. If *extent* is not specified, returns the current extent which defaults to null.
+If *extent* is specified, sets the extent of the Sankey layout to the specified bounds and returns the layout. The *extent* bounds are specified as an array \[\[<i>x0</i>, <i>y0</i>\], \[<i>x1</i>, <i>y1</i>\]\], where *x0* is the left side of the extent, *y0* is the top, *x1* is the right and *y1* is the bottom. If *extent* is not specified, returns the current extent which defaults to null.
 
 <a name="sankey_size" href="#sankey_size">#</a> <i>sankey</i>.<b>size</b>([<i>size</i>])
 
