@@ -8,7 +8,8 @@ export default function() {
       nodePadding = 8,
       size = [1, 1],
       nodes = [],
-      links = [];
+      links = [],
+      totalSeasons = 3;
 
   sankey.nodeWidth = function(_) {
     if (!arguments.length) return nodeWidth;
@@ -21,6 +22,13 @@ export default function() {
     nodePadding = +_;
     return sankey;
   };
+
+  // custom property for MTSS, following same convention above...
+  sankey.totalSeasons = function (_) {
+      if (!arguments.length) return nodePadding;
+      totalSeasons = +_;
+      return sankey;
+  }
 
   sankey.nodes = function(_) {
     if (!arguments.length) return nodes;
@@ -65,6 +73,12 @@ export default function() {
           x3 = xi(1 - curvature),
           y0 = d.source.y + d.sy + d.dy / 2,
           y1 = d.target.y + d.ty + d.dy / 2;
+
+      // this fixes bug with linear gradients when the link is perfectly horizontal
+      if (y0 === y1){
+          y1--;
+      }
+
       return "M" + x0 + "," + y0
            + "C" + x2 + "," + y0
            + " " + x3 + "," + y1
@@ -119,7 +133,12 @@ export default function() {
     while (remainingNodes.length) {
       nextNodes = [];
       remainingNodes.forEach(function(node) {
-        node.x = x;
+        /*
+          If there are 3 seasons, there's the potential for a winter status to appear in fall column if there's no such status for Fall
+          This can be overriden using the mapping above, but there needs to be a 0-index season, which would break Winter to Spring...
+          So if totalSeasons < 3, use x as before
+        */
+        node.x = totalSeasons === 3 ? seasonPositionMap[node.season] : x;
         node.dx = nodeWidth;
         node.sourceLinks.forEach(function(link) {
           if (nextNodes.indexOf(link.target) < 0) {
