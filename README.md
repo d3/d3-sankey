@@ -123,7 +123,7 @@ If *iterations* is specified, sets the number of relaxation iterations when [gen
 
 <a name="sankeyLinkHorizontal" href="#sankeyLinkHorizontal">#</a> d3.<i>sankeyLinkHorizontal</i>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLinkHorizontal.js "Source")
 
-Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkHorizontal) suitable for a Sankey diagram. The source accessor is defined as:
+Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkHorizontal) suitable for a Sankey diagram. The [source accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_source) is defined as:
 
 ```js
 function source(d) {
@@ -131,7 +131,7 @@ function source(d) {
 }
 ```
 
-The target accessor is defined as:
+The [target accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_target) is defined as:
 
 ```js
 function target(d) {
