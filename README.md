@@ -89,7 +89,7 @@ Each *link* must be an object with the following properties:
 * *link*.target - the link’s target [node](#sankey_nodes)
 * *link*.value - the link’s numeric value
 
-For convenience, a link’s source and target may be initialized using the zero-based index of corresponding node in the array of nodes passed to the [Sankey generator](#_sankey) rather than object references. The following properties are assigned to each link by the [Sankey generator](#_sankey):
+For convenience, a link’s source and target may be initialized using the zero-based index of corresponding node in the array of nodes returned by the [nodes accessor](#sankey_nodes) of the [Sankey generator](#_sankey) rather than object references. The following properties are assigned to each link by the [Sankey generator](#_sankey):
 
 * *link*.dy - the link’s breadth (proportional to its value)
 * *link*.sy - the link’s vertical starting position (at source node)
@@ -105,7 +105,7 @@ If *padding* is specified, sets the vertical separation between nodes at each co
 
 <a name="sankey_extent" href="#sankey_extent">#</a> <i>sankey</i>.<b>extent</b>([<i>extent</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L84 "Source")
 
-If *extent* is specified, sets the extent of the Sankey layout to the specified bounds and returns the layout. The *extent* bounds are specified as an array \[\[<i>x0</i>, <i>y0</i>\], \[<i>x1</i>, <i>y1</i>\]\], where *x0* is the left side of the extent, *y0* is the top, *x1* is the right and *y1* is the bottom. If *extent* is not specified, returns the current extent which defaults to null.
+If *extent* is specified, sets the extent of the Sankey layout to the specified bounds and returns the layout. The *extent* bounds are specified as an array \[\[<i>x0</i>, <i>y0</i>\], \[<i>x1</i>, <i>y1</i>\]\], where *x0* is the left side of the extent, *y0* is the top, *x1* is the right and *y1* is the bottom. If *extent* is not specified, returns the current extent which defaults to [[0, 0], [1, 1]].
 
 <a name="sankey_size" href="#sankey_size">#</a> <i>sankey</i>.<b>size</b>([<i>size</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L80 "Source")
 
