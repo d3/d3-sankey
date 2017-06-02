@@ -42,8 +42,8 @@ Computes the node and link positions for the given *arguments*, returning a *gra
 
 Recomputes the specified *graph*’s links’ positions, updating the following properties of each *link*:
 
-* *link*.sy - the link’s vertical starting position (at source node)
-* *link*.ty - the link’s vertical end position (at target node)
+* *link*.y0 - the link’s vertical starting position (at source node)
+* *link*.y1 - the link’s vertical end position (at target node)
 
 This method is intended to be called after computing the initial [Sankey layout](#_sankey), for example when the diagram is repositioned interactively.
 
@@ -64,11 +64,12 @@ Each *node* must be an object. The following properties are assigned by the [San
 * *node*.sourceLinks - the array of outgoing [links](#sankey_links) which have this node as their source
 * *node*.targetLinks - the array of incoming [links](#sankey_links) which have this node as their target
 * *node*.value - the node’s value; the sum of *link*.value for the node’s incoming [links](#sankey_links)
-* *node*.index - the zero-based index of *node* within the array of nodes
-* *node*.x - the node’s horizontal position (derived from the graph topology)
-* *node*.dx - the node’s node width
-* *node*.y - the node’s vertical position
-* *node*.dy - the node’s height (proportional to its value)
+* *node*.index - the node’s zero-based index within the array of nodes
+* *node*.depth - the node’s zero-based graph depth, derived from the graph topology
+* *node*.x0 - the node’s minimum horizontal position, derived from *node*.depth
+* *node*.x1 - the node’s maximum horizontal position (*node*.x0 + [*sankey*.nodeWidth](#sankey_nodeWidth))
+* *node*.y0 - the node’s minimum vertical position
+* *node*.y1 - the node’s maximum vertical position (*node*.y1 - *node*.y0 is proportional to *node*.value)
 
 See also [*sankey*.links](#sankey_links).
 
@@ -92,9 +93,9 @@ Each *link* must be an object with the following properties:
 
 For convenience, a link’s source and target may be initialized using the zero-based index of corresponding node in the array of nodes returned by the [nodes accessor](#sankey_nodes) of the [Sankey generator](#_sankey) rather than object references. The following properties are assigned to each link by the [Sankey generator](#_sankey):
 
-* *link*.dy - the link’s breadth (proportional to its value)
-* *link*.sy - the link’s vertical starting position (at source node)
-* *link*.ty - the link’s vertical end position (at target node)
+* *link*.y0 - the link’s vertical starting position (at source node)
+* *link*.y1 - the link’s vertical end position (at target node)
+* *link*.width - the link’s width (proportional to *link*.value)
 * *link*.index - the zero-based index of *link* within the array of links
 
 <a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L64 "Source")
@@ -129,7 +130,7 @@ Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/REA
 
 ```js
 function source(d) {
-  return [d.source.x + d.source.dx, d.source.y + d.sy + d.dy / 2];
+  return [d.source.x1, d.y0];
 }
 ```
 
@@ -137,7 +138,7 @@ The [target accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_
 
 ```js
 function target(d) {
-  return [d.target.x, d.target.y + d.ty + d.dy / 2];
+  return [d.target.x0, d.y1];
 }
 ```
 
@@ -152,5 +153,5 @@ svg.append("g")
   .data(graph.links)
   .enter().append("path")
     .attr("d", d3.sankeyLinkHorizontal())
-    .attr("stroke-width", function(d) { return d.dy; });
+    .attr("stroke-width", function(d) { return d.width; });
 ```

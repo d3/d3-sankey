@@ -2,16 +2,16 @@ import {ascending, min, sum} from "d3-array";
 import {nest} from "d3-collection";
 import constant from "./constant";
 
-function ascendingSourceDepth(a, b) {
-  return a.source.y - b.source.y || a.index - b.index;
+function ascendingSourceBreadth(a, b) {
+  return ascendingBreadth(a.source, b.source) || a.index - b.index;
 }
 
-function ascendingTargetDepth(a, b) {
-  return a.target.y - b.target.y || a.index - b.index;
+function ascendingTargetBreadth(a, b) {
+  return ascendingBreadth(a.target, b.target) || a.index - b.index;
 }
 
-function ascendingDepth(a, b) {
-  return a.y - b.y;
+function ascendingBreadth(a, b) {
+  return a.y0 - b.y0;
 }
 
 function value(d) {
@@ -19,7 +19,7 @@ function value(d) {
 }
 
 function nodeCenter(node) {
-  return node.y + node.dy / 2;
+  return (node.y0 + node.y1) / 2;
 }
 
 function weightedSource(link) {
@@ -50,14 +50,14 @@ export default function() {
     var graph = {nodes: nodes.apply(null, arguments), links: links.apply(null, arguments)};
     computeNodeLinks(graph);
     computeNodeValues(graph);
-    computeNodeBreadths(graph);
-    computeNodeDepths(graph, iterations);
-    computeLinkDepths(graph);
+    computeNodeDepths(graph);
+    computeNodeBreadths(graph, iterations);
+    computeLinkBreadths(graph);
     return graph;
   }
 
   sankey.update = function(graph) {
-    computeLinkDepths(graph);
+    computeLinkBreadths(graph);
     return graph;
   };
 
@@ -117,20 +117,19 @@ export default function() {
     });
   }
 
-  // Iteratively assign the breadth (x-position) for each node.
-  // Nodes are assigned the maximum breadth of incoming neighbors plus one;
-  // nodes with no incoming links are assigned breadth zero, while
-  // nodes with no outgoing links are assigned the maximum breadth.
-  function computeNodeBreadths(graph) {
+  // Iteratively assign the depth (x-position) for each node.
+  // Nodes are assigned the maximum depth of incoming neighbors plus one;
+  // nodes with no incoming links are assigned depth zero, while
+  // nodes with no outgoing links are assigned the maximum depth.
+  function computeNodeDepths(graph) {
     var remainingNodes = graph.nodes,
         nextNodes,
-        x = 0;
+        depth = 0;
 
     while (remainingNodes.length) {
       nextNodes = [];
       remainingNodes.forEach(function(node) {
-        node.x = x;
-        node.dx = dx;
+        node.depth = depth;
         node.sourceLinks.forEach(function(link) {
           if (nextNodes.indexOf(link.target) < 0) {
             nextNodes.push(link.target);
@@ -138,45 +137,46 @@ export default function() {
         });
       });
       remainingNodes = nextNodes;
-      ++x;
+      ++depth;
     }
 
     //
-    moveSinksRight(graph, x);
-    scaleNodeBreadths(graph, (x1 - x0 - dx) / (x - 1));
+    moveSinksRight(graph, depth);
+    scaleNodeDepths(graph, depth);
   }
 
   // function moveSourcesRight(graph) {
   //   graph.nodes.forEach(function(node) {
   //     if (!node.targetLinks.length) {
-  //       node.x = min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
+  //       node.depth = min(node.sourceLinks, function(d) { return d.target.depth; }) - 1;
   //     }
   //   });
   // }
 
-  function moveSinksRight(graph, x) {
+  function moveSinksRight(graph, depth) {
     graph.nodes.forEach(function(node) {
       if (!node.sourceLinks.length) {
-        node.x = x - 1;
+        node.depth = depth - 1;
       }
     });
   }
 
-  function scaleNodeBreadths(graph, kx) {
+  function scaleNodeDepths(graph, depth) {
+    var kx = (x1 - x0 - dx) / (depth - 1);
     graph.nodes.forEach(function(node) {
-      node.x = x0 + node.x * kx;
+      node.x1 = (node.x0 = x0 + node.depth * kx) + dx;
     });
   }
 
-  function computeNodeDepths(graph) {
-    var nodesByBreadth = nest()
-        .key(function(d) { return d.x; })
+  function computeNodeBreadths(graph) {
+    var nodesByDepth = nest()
+        .key(function(d) { return d.depth; })
         .sortKeys(ascending)
         .entries(graph.nodes)
         .map(function(d) { return d.values; });
 
     //
-    initializeNodeDepth();
+    initializeNodeBreadth();
     resolveCollisions();
     for (var alpha = 1, n = iterations; n > 0; --n) {
       relaxRightToLeft(alpha *= 0.99);
@@ -185,45 +185,46 @@ export default function() {
       resolveCollisions();
     }
 
-    function initializeNodeDepth() {
-      var ky = min(nodesByBreadth, function(nodes) {
+    function initializeNodeBreadth() {
+      var ky = min(nodesByDepth, function(nodes) {
         return (y1 - y0 - (nodes.length - 1) * py) / sum(nodes, value);
       });
 
-      nodesByBreadth.forEach(function(nodes) {
+      nodesByDepth.forEach(function(nodes) {
         nodes.forEach(function(node, i) {
-          node.y = i;
-          node.dy = node.value * ky;
+          node.y1 = (node.y0 = i) + node.value * ky;
         });
       });
 
       graph.links.forEach(function(link) {
-        link.dy = link.value * ky;
+        link.width = link.value * ky;
       });
     }
 
     function relaxLeftToRight(alpha) {
-      nodesByBreadth.forEach(function(nodes) {
+      nodesByDepth.forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.targetLinks.length) {
-            node.y += (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
+            var dy = (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
+            node.y0 += dy, node.y1 += dy;
           }
         });
       });
     }
 
     function relaxRightToLeft(alpha) {
-      nodesByBreadth.slice().reverse().forEach(function(nodes) {
+      nodesByDepth.slice().reverse().forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.sourceLinks.length) {
-            node.y += (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
+            var dy = (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
+            node.y0 += dy, node.y1 += dy;
           }
         });
       });
     }
 
     function resolveCollisions() {
-      nodesByBreadth.forEach(function(nodes) {
+      nodesByDepth.forEach(function(nodes) {
         var node,
             dy,
             y = y0,
@@ -231,45 +232,43 @@ export default function() {
             i;
 
         // Push any overlapping nodes down.
-        nodes.sort(ascendingDepth);
+        nodes.sort(ascendingBreadth);
         for (i = 0; i < n; ++i) {
           node = nodes[i];
-          dy = y - node.y;
-          if (dy > 0) node.y += dy;
-          y = node.y + node.dy + py;
+          dy = y - node.y0;
+          if (dy > 0) node.y0 += dy, node.y1 += dy;
+          y = node.y1 + py;
         }
 
         // If the bottommost node goes outside the bounds, push it back up.
         dy = y - py - y1;
         if (dy > 0) {
-          y = node.y -= dy;
+          y = (node.y0 -= dy), node.y1 -= dy;
 
           // Push any overlapping nodes back up.
           for (i = n - 2; i >= 0; --i) {
             node = nodes[i];
-            dy = node.y + node.dy + py - y;
-            if (dy > 0) node.y -= dy;
-            y = node.y;
+            dy = node.y1 + py - y;
+            if (dy > 0) node.y0 -= dy, node.y1 -= dy;
+            y = node.y0;
           }
         }
       });
     }
   }
 
-  function computeLinkDepths(graph) {
+  function computeLinkBreadths(graph) {
     graph.nodes.forEach(function(node) {
-      node.sourceLinks.sort(ascendingTargetDepth);
-      node.targetLinks.sort(ascendingSourceDepth);
+      node.sourceLinks.sort(ascendingTargetBreadth);
+      node.targetLinks.sort(ascendingSourceBreadth);
     });
     graph.nodes.forEach(function(node) {
-      var sy = 0, ty = 0;
+      var y0 = node.y0, y1 = y0;
       node.sourceLinks.forEach(function(link) {
-        link.sy = sy;
-        sy += link.dy;
+        link.y0 = y0 + link.width / 2, y0 += link.width;
       });
       node.targetLinks.forEach(function(link) {
-        link.ty = ty;
-        ty += link.dy;
+        link.y1 = y1 + link.width / 2, y1 += link.width;
       });
     });
   }

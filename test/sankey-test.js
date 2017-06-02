@@ -11,10 +11,10 @@ tape("sankey(energy) returns the expected results", function(test) {
 
 function nodePosition(node) {
   return {
-    x: round(node.x),
-    dx: round(node.dx),
-    y: round(node.y),
-    dy: round(node.dy)
+    x: round(node.x0),
+    dx: round(node.x1 - node.x0),
+    y: round(node.y0),
+    dy: round(node.y1 - node.y0)
   };
 }
 
@@ -22,9 +22,9 @@ function linkPosition(link) {
   return {
     source: nodePosition(link.source),
     target: nodePosition(link.target),
-    dy: round(link.dy),
-    sy: round(link.sy),
-    ty: round(link.ty)
+    dy: round(link.width),
+    sy: round(link.y0 - link.source.y0 - link.width / 2),
+    ty: round(link.y1 - link.target.y0 - link.width / 2)
   };
 }
 
