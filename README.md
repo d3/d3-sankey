@@ -8,9 +8,7 @@ Source: Department of Energy & Climate Change, Tom Counsell.
 
 ## Installing
 
-If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release](https://github.com/d3/d3-sankey/releases/latest).
-
-You can also load directly from unpkg.
+If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release](https://github.com/d3/d3-sankey/releases/latest). You can also load directly from [unpkg.com](https://unpkg.com/d3-sankey/). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
 
 ```html
 <script src="https://unpkg.com/d3-array@1"></script>
