@@ -23,7 +23,7 @@
   "scripts": {
     "pretest": "rm -rf build && mkdir build && rollup --banner \"$(preamble)\" -g d3-array:d3,d3-collection:d3,d3-shape:d3 -f umd -n d3 -o build/d3-sankey.js -- index.js",
     "test": "tape 'test/**/*-test.js' && eslint index.js src",
-    "prepublish": "npm run test && uglifyjs --preamble \"$(preamble)\" build/d3-sankey.js -c -m -o build/d3-sankey.min.js",
+    "prepublish": "npm run test && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" build/d3-sankey.js -c -m -o build/d3-sankey.min.js",
     "postpublish": "git push && git push --tags && zip -j build/d3-sankey.zip -- LICENSE README.md build/d3-sankey.js build/d3-sankey.min.js"
   },
   "dependencies": {
@@ -32,10 +32,10 @@
     "d3-shape": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "3",
+    "eslint": "4",
     "package-preamble": "0.1.0",
-    "rollup": "0.41",
+    "rollup": "0.42",
     "tape": "4",
-    "uglify-js": "2"
+    "uglify-js": "3"
   }
 }
