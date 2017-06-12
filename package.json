@@ -29,7 +29,6 @@
   "dependencies": {
     "d3-array": "1",
     "d3-collection": "1",
-    "d3-interpolate": "1",
     "d3-shape": "^1.2.0"
   },
   "devDependencies": {
