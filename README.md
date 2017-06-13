@@ -189,7 +189,7 @@ Returns *node*.depth.
 
 <img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">
 
-Returns *n* - 1 - *node*.height.
+Returns *n* - 1 - *node*.depth.
 
 <a name="sankeyCenter" href="#sankeyCenter">#</a> d3.<b>sankeyCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js#L19 "Source")
 
