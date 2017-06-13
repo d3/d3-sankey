@@ -25,18 +25,18 @@ var sankey = d3.sankey();
 
 ## API Reference
 
-<a href="#sankey" name="sankey">#</a> d3.<b>sankey</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L41 "Source")
+<a href="#sankey" name="sankey">#</a> d3.<b>sankey</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L51 "Source")
 
 Constructs a new Sankey generator with the default settings.
 
-<a href="#_sankey" name="_sankey">#</a> <i>sankey</i>(<i>arguments</i>…) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L49 "Source")
+<a href="#_sankey" name="_sankey">#</a> <i>sankey</i>(<i>arguments</i>…) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L60 "Source")
 
 Computes the node and link positions for the given *arguments*, returning a *graph* representing the Sankey layout. The returned *graph* has the following properties:
 
 * *graph*.nodes - the array of [nodes](#sankey_nodes)
 * *graph*.links - the array of [links](#sankey_links)
 
-<a href="#sankey_update" name="sankey_update">#</a> <i>sankey</i>.<b>update</b>(<i>graph</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L59 "Source")
+<a href="#sankey_update" name="sankey_update">#</a> <i>sankey</i>.<b>update</b>(<i>graph</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L70 "Source")
 
 Recomputes the specified *graph*’s links’ positions, updating the following properties of each *link*:
 
@@ -45,7 +45,7 @@ Recomputes the specified *graph*’s links’ positions, updating the following 
 
 This method is intended to be called after computing the initial [Sankey layout](#_sankey), for example when the diagram is repositioned interactively.
 
-<a name="sankey_nodes" href="#sankey_nodes">#</a> <i>sankey</i>.<b>nodes</b>([<i>nodes</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L72 "Source")
+<a name="sankey_nodes" href="#sankey_nodes">#</a> <i>sankey</i>.<b>nodes</b>([<i>nodes</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L87 "Source")
 
 If *nodes* is specified, sets the Sankey generator’s nodes accessor to the specified function or array and returns this Sankey generator. If *nodes* is not specified, returns the current nodes accessor, which defaults to:
 
@@ -71,7 +71,7 @@ Each *node* must be an object. The following properties are assigned by the [San
 
 See also [*sankey*.links](#sankey_links).
 
-<a name="sankey_links" href="#sankey_links">#</a> <i>sankey</i>.<b>links</b>([<i>links</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L76 "Source")
+<a name="sankey_links" href="#sankey_links">#</a> <i>sankey</i>.<b>links</b>([<i>links</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L91 "Source")
 
 If *links* is specified, sets the Sankey generator’s links accessor to the specified function or array and returns this Sankey generator. If *links* is not specified, returns the current links accessor, which defaults to:
 
@@ -89,26 +89,76 @@ Each *link* must be an object with the following properties:
 * *link*.target - the link’s target [node](#sankey_nodes)
 * *link*.value - the link’s numeric value
 
-For convenience, a link’s source and target may be initialized using the zero-based index of corresponding node in the array of nodes returned by the [nodes accessor](#sankey_nodes) of the [Sankey generator](#_sankey) rather than object references. The following properties are assigned to each link by the [Sankey generator](#_sankey):
+For convenience, a link’s source and target may be initialized using numeric or string identifiers rather than object references; ; see [*sankey*.nodeId](#sankey_nodeId). The following properties are assigned to each link by the [Sankey generator](#_sankey):
 
 * *link*.y0 - the link’s vertical starting position (at source node)
 * *link*.y1 - the link’s vertical end position (at target node)
 * *link*.width - the link’s width (proportional to *link*.value)
 * *link*.index - the zero-based index of *link* within the array of links
 
-<a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L64 "Source")
+<a name="sankey_nodeId" href="#sankey_nodeId">#</a> <i>sankey</i>.<b>nodeId</b>([<i>id</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L75 "Source")
+
+If *id* is specified, sets the node id accessor to the specified function and returns this Sankey generator. If *id* is not specified, returns the current node id accessor, which defaults to the numeric *node*.index:
+
+```js
+function id(d) {
+  return d.index;
+}
+```
+
+The default id accessor allows each link’s source and target to be specified as a zero-based index into the [nodes](#sankey_nodes) array. For example:
+
+```js
+var nodes = [
+  {"id": "Alice"},
+  {"id": "Bob"},
+  {"id": "Carol"}
+];
+
+var links = [
+  {"source": 0, "target": 1}, // Alice → Bob
+  {"source": 1, "target": 2} // Bob → Carol
+];
+```
+
+Now consider a different id accessor that returns a string:
+
+```js
+function id(d) {
+  return d.id;
+}
+```
+
+With this accessor, you can use named sources and targets:
+
+```js
+var nodes = [
+  {"id": "Alice"},
+  {"id": "Bob"},
+  {"id": "Carol"}
+];
+
+var links = [
+  {"source": "Alice", "target": "Bob"},
+  {"source": "Bob", "target": "Carol"}
+];
+```
+
+This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](https://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35).
+
+<a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L79 "Source")
 
 If *width* is specified, sets the node width to the specified number and returns this Sankey generator. If *width* is not specified, returns the current node width, which defaults to 24.
 
-<a name="sankey_nodePadding" href="#sankey_nodePadding">#</a> <i>sankey</i>.<b>nodePadding</b>([<i>padding</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L68 "Source")
+<a name="sankey_nodePadding" href="#sankey_nodePadding">#</a> <i>sankey</i>.<b>nodePadding</b>([<i>padding</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L83 "Source")
 
 If *padding* is specified, sets the vertical separation between nodes at each column to the specified number and returns this Sankey generator. If *padding* is not specified, returns the current node padding, which defaults to 8.
 
-<a name="sankey_extent" href="#sankey_extent">#</a> <i>sankey</i>.<b>extent</b>([<i>extent</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L84 "Source")
+<a name="sankey_extent" href="#sankey_extent">#</a> <i>sankey</i>.<b>extent</b>([<i>extent</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L99 "Source")
 
 If *extent* is specified, sets the extent of the Sankey layout to the specified bounds and returns the layout. The *extent* bounds are specified as an array \[\[<i>x0</i>, <i>y0</i>\], \[<i>x1</i>, <i>y1</i>\]\], where *x0* is the left side of the extent, *y0* is the top, *x1* is the right and *y1* is the bottom. If *extent* is not specified, returns the current extent which defaults to [[0, 0], [1, 1]].
 
-<a name="sankey_size" href="#sankey_size">#</a> <i>sankey</i>.<b>size</b>([<i>size</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L80 "Source")
+<a name="sankey_size" href="#sankey_size">#</a> <i>sankey</i>.<b>size</b>([<i>size</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L95 "Source")
 
 An alias for [*sankey*.extent](#sankey_extent) where the minimum *x* and *y* of the extent are ⟨0,0⟩. Equivalent to:
 
@@ -116,7 +166,7 @@ An alias for [*sankey*.extent](#sankey_extent) where the minimum *x* and *y* of 
 sankey.extent([[0, 0], size]);
 ```
 
-<a name="sankey_iterations" href="#sankey_iterations">#</a> <i>sankey</i>.<b>iterations</b>([<i>iterations</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L88 "Source")
+<a name="sankey_iterations" href="#sankey_iterations">#</a> <i>sankey</i>.<b>iterations</b>([<i>iterations</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L103 "Source")
 
 If *iterations* is specified, sets the number of relaxation iterations when [generating the layout](#_sankey) and returns this Sankey generator. If *iterations* is not specified, returns the current number of relaxation iterations, which defaults to 32.
 

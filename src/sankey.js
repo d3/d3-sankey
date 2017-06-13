@@ -1,5 +1,5 @@
 import {ascending, min, sum} from "d3-array";
-import {nest} from "d3-collection";
+import {map, nest} from "d3-collection";
 import constant from "./constant";
 
 function ascendingSourceBreadth(a, b) {
@@ -30,6 +30,10 @@ function weightedTarget(link) {
   return nodeCenter(link.target) * link.value;
 }
 
+function defaultId(d) {
+  return d.index;
+}
+
 function defaultNodes(graph) {
   return graph.nodes;
 }
@@ -38,10 +42,17 @@ function defaultLinks(graph) {
   return graph.links;
 }
 
+function find(nodeById, id) {
+  var node = nodeById.get(id);
+  if (!node) throw new Error("missing: " + id);
+  return node;
+}
+
 export default function() {
   var x0 = 0, y0 = 0, x1 = 1, y1 = 1, // extent
       dx = 24, // nodeWidth
       py = 8, // nodePadding
+      id = defaultId,
       nodes = defaultNodes,
       links = defaultLinks,
       iterations = 32;
@@ -59,6 +70,10 @@ export default function() {
   sankey.update = function(graph) {
     computeLinkBreadths(graph);
     return graph;
+  };
+
+  sankey.nodeId = function(_) {
+    return arguments.length ? (id = typeof _ === "function" ? _ : constant(_), sankey) : id;
   };
 
   sankey.nodeWidth = function(_) {
@@ -97,11 +112,12 @@ export default function() {
       node.sourceLinks = [];
       node.targetLinks = [];
     });
+    var nodeById = map(graph.nodes, id);
     graph.links.forEach(function(link, i) {
-      var source = link.source, target = link.target;
-      if (typeof source === "number") source = link.source = graph.nodes[link.source];
-      if (typeof target === "number") target = link.target = graph.nodes[link.target];
       link.index = i;
+      var source = link.source, target = link.target;
+      if (typeof source !== "object") source = link.source = find(nodeById, source);
+      if (typeof target !== "object") target = link.target = find(nodeById, target);
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     });
