@@ -149,7 +149,7 @@ This is particularly useful when representing graphs in JSON, as JSON does not a
 
 <a name="sankey_nodeAlign" href="#sankey_nodeAlign">#</a> <i>sankey</i>.<b>nodeAlign</b>([<i>align</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L81 "Source")
 
-If *align* is specified, sets the node [alignment method](#alignments) the specified function and returns this Sankey generator. If *align* is not specified, returns the current node alignment method, which defaults to [d3.sankeyLeft](#sankeyLeft).
+If *align* is specified, sets the node [alignment method](#alignments) the specified function and returns this Sankey generator. If *align* is not specified, returns the current node alignment method, which defaults to [d3.sankeyLeft](#sankeyLeft). The specified function is evaluated for each input *node* in order, being passed the current *node* and the total depth *n* of the graph (one plus the maximum *node*.depth), and must return an integer between 0 and *n* - 1 that indicates the desired horizontal position of the node in the generated Sankey diagram.
 
 <a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L85 "Source")
 
