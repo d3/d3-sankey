@@ -34,7 +34,7 @@
   "devDependencies": {
     "eslint": "4",
     "package-preamble": "0.1.0",
-    "rollup": "0.42",
+    "rollup": "0.43",
     "tape": "4",
     "uglify-js": "3"
   }
