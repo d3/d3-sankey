@@ -1,5 +1,6 @@
 import {ascending, min, sum} from "d3-array";
 import {map, nest} from "d3-collection";
+import {justify} from "./align";
 import constant from "./constant";
 
 function ascendingSourceBreadth(a, b) {
@@ -53,6 +54,7 @@ export default function() {
       dx = 24, // nodeWidth
       py = 8, // nodePadding
       id = defaultId,
+      align = justify,
       nodes = defaultNodes,
       links = defaultLinks,
       iterations = 32;
@@ -74,6 +76,10 @@ export default function() {
 
   sankey.nodeId = function(_) {
     return arguments.length ? (id = typeof _ === "function" ? _ : constant(_), sankey) : id;
+  };
+
+  sankey.nodeAlign = function(_) {
+    return arguments.length ? (align = typeof _ === "function" ? _ : constant(_), sankey) : align;
   };
 
   sankey.nodeWidth = function(_) {
@@ -138,55 +144,39 @@ export default function() {
   // nodes with no incoming links are assigned depth zero, while
   // nodes with no outgoing links are assigned the maximum depth.
   function computeNodeDepths(graph) {
-    var remainingNodes = graph.nodes,
-        nextNodes,
-        depth = 0;
+    var nodes, next, x;
 
-    while (remainingNodes.length) {
-      nextNodes = [];
-      remainingNodes.forEach(function(node) {
-        node.depth = depth;
+    for (nodes = graph.nodes, next = [], x = 0; nodes.length; ++x, nodes = next, next = []) {
+      nodes.forEach(function(node) {
+        node.depth = x;
         node.sourceLinks.forEach(function(link) {
-          if (nextNodes.indexOf(link.target) < 0) {
-            nextNodes.push(link.target);
+          if (next.indexOf(link.target) < 0) {
+            next.push(link.target);
           }
         });
       });
-      remainingNodes = nextNodes;
-      ++depth;
     }
 
-    //
-    moveSinksRight(graph, depth);
-    scaleNodeDepths(graph, depth);
-  }
+    for (nodes = graph.nodes, next = [], x = 0; nodes.length; ++x, nodes = next, next = []) {
+      nodes.forEach(function(node) {
+        node.height = x;
+        node.targetLinks.forEach(function(link) {
+          if (next.indexOf(link.source) < 0) {
+            next.push(link.source);
+          }
+        });
+      });
+    }
 
-  // function moveSourcesRight(graph) {
-  //   graph.nodes.forEach(function(node) {
-  //     if (!node.targetLinks.length) {
-  //       node.depth = min(node.sourceLinks, function(d) { return d.target.depth; }) - 1;
-  //     }
-  //   });
-  // }
-
-  function moveSinksRight(graph, depth) {
+    var kx = (x1 - x0 - dx) / (x - 1);
     graph.nodes.forEach(function(node) {
-      if (!node.sourceLinks.length) {
-        node.depth = depth - 1;
-      }
-    });
-  }
-
-  function scaleNodeDepths(graph, depth) {
-    var kx = (x1 - x0 - dx) / (depth - 1);
-    graph.nodes.forEach(function(node) {
-      node.x1 = (node.x0 = x0 + node.depth * kx) + dx;
+      node.x1 = (node.x0 = x0 + Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x)))) * kx) + dx;
     });
   }
 
   function computeNodeBreadths(graph) {
-    var nodesByDepth = nest()
-        .key(function(d) { return d.depth; })
+    var columns = nest()
+        .key(function(d) { return d.x0; })
         .sortKeys(ascending)
         .entries(graph.nodes)
         .map(function(d) { return d.values; });
@@ -202,11 +192,11 @@ export default function() {
     }
 
     function initializeNodeBreadth() {
-      var ky = min(nodesByDepth, function(nodes) {
+      var ky = min(columns, function(nodes) {
         return (y1 - y0 - (nodes.length - 1) * py) / sum(nodes, value);
       });
 
-      nodesByDepth.forEach(function(nodes) {
+      columns.forEach(function(nodes) {
         nodes.forEach(function(node, i) {
           node.y1 = (node.y0 = i) + node.value * ky;
         });
@@ -218,7 +208,7 @@ export default function() {
     }
 
     function relaxLeftToRight(alpha) {
-      nodesByDepth.forEach(function(nodes) {
+      columns.forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.targetLinks.length) {
             var dy = (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
@@ -229,7 +219,7 @@ export default function() {
     }
 
     function relaxRightToLeft(alpha) {
-      nodesByDepth.slice().reverse().forEach(function(nodes) {
+      columns.slice().reverse().forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.sourceLinks.length) {
             var dy = (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
@@ -240,7 +230,7 @@ export default function() {
     }
 
     function resolveCollisions() {
-      nodesByDepth.forEach(function(nodes) {
+      columns.forEach(function(nodes) {
         var node,
             dy,
             y = y0,

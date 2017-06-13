@@ -64,6 +64,7 @@ Each *node* must be an object. The following properties are assigned by the [San
 * *node*.value - the node’s value; the sum of *link*.value for the node’s incoming [links](#sankey_links)
 * *node*.index - the node’s zero-based index within the array of nodes
 * *node*.depth - the node’s zero-based graph depth, derived from the graph topology
+* *node*.height - the node’s zero-based graph height, derived from the graph topology
 * *node*.x0 - the node’s minimum horizontal position, derived from *node*.depth
 * *node*.x1 - the node’s maximum horizontal position (*node*.x0 + [*sankey*.nodeWidth](#sankey_nodeWidth))
 * *node*.y0 - the node’s minimum vertical position
@@ -146,6 +147,10 @@ var links = [
 
 This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](https://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35).
 
+<a name="sankey_nodeAlign" href="#sankey_nodeAlign">#</a> <i>sankey</i>.<b>nodeAlign</b>([<i>align</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L81 "Source")
+
+If *align* is specified, sets the node [alignment method](#alignments) the specified function and returns this Sankey generator. If *align* is not specified, returns the current node alignment method, which defaults to [d3.sankeyLeft](#sankeyLeft).
+
 <a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L79 "Source")
 
 If *width* is specified, sets the node width to the specified number and returns this Sankey generator. If *width* is not specified, returns the current node width, which defaults to 24.
@@ -169,6 +174,34 @@ sankey.extent([[0, 0], size]);
 <a name="sankey_iterations" href="#sankey_iterations">#</a> <i>sankey</i>.<b>iterations</b>([<i>iterations</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L103 "Source")
 
 If *iterations* is specified, sets the number of relaxation iterations when [generating the layout](#_sankey) and returns this Sankey generator. If *iterations* is not specified, returns the current number of relaxation iterations, which defaults to 32.
+
+### Alignments
+
+See [*sankey*.nodeAlign](#sankey_nodeAlign).
+
+<a name="sankeyLeft" href="#sankeyLeft">#</a> d3.<b>sankeyLeft</b>(<i>node</i>, <i>n</i>)
+
+<img alt="left" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-left.png" width="480">
+
+Returns *node*.depth.
+
+<a name="sankeyRight" href="#sankeyRight">#</a> d3.<b>sankeyRight</b>(<i>node</i>, <i>n</i>)
+
+<img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">
+
+Returns *n* - 1 - *node*.height.
+
+<a name="sankeyCenter" href="#sankeyCenter">#</a> d3.<b>sankeyCenter</b>(<i>node</i>, <i>n</i>)
+
+<img alt="center" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-center.png" width="480">
+
+Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any incoming links are moved as right as possible.
+
+<a name="sankeyJustify" href="#sankeyJustify">#</a> d3.<b>sankeyJustify</b>(<i>node</i>, <i>n</i>)
+
+<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">
+
+Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links are moved to the far right.
 
 ### Links
 
