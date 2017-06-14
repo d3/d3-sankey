@@ -1,4 +1,4 @@
-import {min} from "d3-collection";
+import {min} from "d3-array";
 
 function targetDepth(d) {
   return d.target.depth;
