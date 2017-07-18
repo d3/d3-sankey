@@ -193,7 +193,7 @@ export default function() {
 
     function initializeNodeBreadth() {
       var ky = min(columns, function(nodes) {
-        return (y1 - y0 - (nodes.length - 1) * py) / sum(nodes, value);
+        return (y1 - y0 - (nodes.length - 1) * py) / Math.max(sum(nodes, value), 1);
       });
 
       columns.forEach(function(nodes) {
@@ -211,7 +211,7 @@ export default function() {
       columns.forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.targetLinks.length) {
-            var dy = (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
+            var dy = (sum(node.targetLinks, weightedSource) / Math.max(sum(node.targetLinks, value), 1) - nodeCenter(node)) * alpha;
             node.y0 += dy, node.y1 += dy;
           }
         });
@@ -222,7 +222,7 @@ export default function() {
       columns.slice().reverse().forEach(function(nodes) {
         nodes.forEach(function(node) {
           if (node.sourceLinks.length) {
-            var dy = (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
+            var dy = (sum(node.sourceLinks, weightedTarget) / Math.max(sum(node.sourceLinks, value), 1) - nodeCenter(node)) * alpha;
             node.y0 += dy, node.y1 += dy;
           }
         });
