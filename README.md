@@ -61,7 +61,7 @@ Each *node* must be an object. The following properties are assigned by the [San
 
 * *node*.sourceLinks - the array of outgoing [links](#sankey_links) which have this node as their source
 * *node*.targetLinks - the array of incoming [links](#sankey_links) which have this node as their target
-* *node*.value - the node’s value; the sum of *link*.value for the node’s incoming [links](#sankey_links)
+* *node*.value - the node’s value; if not defined, this is the sum of *link*.value for the node’s incoming [links](#sankey_links)
 * *node*.index - the node’s zero-based index within the array of nodes
 * *node*.depth - the node’s zero-based graph depth, derived from the graph topology
 * *node*.height - the node’s zero-based graph height, derived from the graph topology
