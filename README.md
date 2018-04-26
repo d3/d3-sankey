@@ -90,7 +90,7 @@ Each *link* must be an object with the following properties:
 * *link*.target - the link’s target [node](#sankey_nodes)
 * *link*.value - the link’s numeric value
 
-For convenience, a link’s source and target may be initialized using numeric or string identifiers rather than object references; ; see [*sankey*.nodeId](#sankey_nodeId). The following properties are assigned to each link by the [Sankey generator](#_sankey):
+For convenience, a link’s source and target may be initialized using numeric or string identifiers rather than object references; see [*sankey*.nodeId](#sankey_nodeId). The following properties are assigned to each link by the [Sankey generator](#_sankey):
 
 * *link*.y0 - the link’s vertical starting position (at source node)
 * *link*.y1 - the link’s vertical end position (at target node)
