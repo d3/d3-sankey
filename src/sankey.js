@@ -64,7 +64,7 @@ export default function() {
     computeNodeLinks(graph);
     computeNodeValues(graph);
     computeNodeDepths(graph);
-    computeNodeBreadths(graph, iterations);
+    computeNodeBreadths(graph);
     computeLinkBreadths(graph);
     return graph;
   }
