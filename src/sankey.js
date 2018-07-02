@@ -72,7 +72,7 @@ export default function Sankey() {
   };
 
   sankey.nodeSort = function(_) {
-    return arguments.length ? (sort = typeof _ === "function" ? _ : constant(_), sankey) : sort;
+    return arguments.length ? (sort = typeof _ === "function" ? _ : null, sankey) : sort;
   };
 
   sankey.nodeWidth = function(_) {
@@ -247,7 +247,9 @@ export default function Sankey() {
             i;
 
         // Push any overlapping nodes down.
-        nodes.sort(sort);
+        if (typeof sort === "function") {
+          nodes.sort(sort);
+        }
         for (i = 0; i < n; ++i) {
           node = nodes[i];
           dy = y - node.y0;
