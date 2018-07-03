@@ -155,7 +155,7 @@ If *align* is specified, sets the node [alignment method](#alignments) to the sp
 
 <a name="sankey_nodeSort" href="#sankey_nodeSort">#</a> <i>sankey</i>.<b>nodeSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L86 "Source")
 
-If *sort* is specified, sets the node sort method to the specified function and returns this Sankey generator. If *sort* is not specified, returns the current node sort method. The specified function is used to set the vertical order of nodes in any given column, being passed two *node*s, and must return a number, which if is less than 0 places the first node above the second, and if greater than 0 places the second node above the first.
+If *sort* is specified, sets the node sort method to the specified function and returns this Sankey generator. If *sort* is not specified, returns the current node sort method, or *undefined* if node sorting is disabled. The specified function is used to set the vertical order of nodes in any given column, being passed two *node*s, and must return a number, which if is less than 0 places the first node above the second, and if greater than 0 places the second node above the first. Specifying *undefined*, or any value that is not a function, will disable sorting and display nodes in the order specified in the source array.
 
 <a name="sankey_nodeWidth" href="#sankey_nodeWidth">#</a> <i>sankey</i>.<b>nodeWidth</b>([<i>width</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js#L90 "Source")
 
