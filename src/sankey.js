@@ -1,7 +1,7 @@
 import {ascending, min, sum} from "d3-array";
 import {map, nest} from "d3-collection";
-import {justify} from "./align";
-import constant from "./constant";
+import {justify} from "./align.js";
+import constant from "./constant.js";
 
 function ascendingSourceBreadth(a, b) {
   return ascendingBreadth(a.source, b.source) || a.index - b.index;
@@ -17,18 +17,6 @@ function ascendingBreadth(a, b) {
 
 function value(d) {
   return d.value;
-}
-
-function nodeCenter(node) {
-  return (node.y0 + node.y1) / 2;
-}
-
-function weightedSource(link) {
-  return nodeCenter(link.source) * link.value;
-}
-
-function weightedTarget(link) {
-  return nodeCenter(link.target) * link.value;
 }
 
 function defaultId(d) {
@@ -49,7 +37,7 @@ function find(nodeById, id) {
   return node;
 }
 
-export default function() {
+export default function Sankey() {
   var x0 = 0, y0 = 0, x1 = 1, y1 = 1, // extent
       dx = 24, // nodeWidth
       py = 8, // nodePadding
@@ -57,7 +45,7 @@ export default function() {
       align = justify,
       nodes = defaultNodes,
       links = defaultLinks,
-      iterations = 32;
+      iterations = 1;
 
   function sankey() {
     var graph = {nodes: nodes.apply(null, arguments), links: links.apply(null, arguments)};
@@ -184,8 +172,8 @@ export default function() {
     //
     initializeNodeBreadth();
     resolveCollisions();
-    for (var alpha = 1, n = iterations; n > 0; --n) {
-      relaxRightToLeft(alpha *= 0.99);
+    for (var alpha = 0.9, n = iterations; n > 0; --n, alpha *= 0.9) {
+      relaxRightToLeft(alpha);
       resolveCollisions();
       relaxLeftToRight(alpha);
       resolveCollisions();
@@ -210,9 +198,17 @@ export default function() {
     function relaxLeftToRight(alpha) {
       columns.forEach(function(nodes) {
         nodes.forEach(function(node) {
-          if (node.targetLinks.length) {
-            var dy = (sum(node.targetLinks, weightedSource) / sum(node.targetLinks, value) - nodeCenter(node)) * alpha;
-            node.y0 += dy, node.y1 += dy;
+          let y = node.y0;
+          for (const {target, width, value} of node.sourceLinks.sort(ascendingTargetBreadth)) {
+            let offset = 0;
+            for (const link of target.targetLinks) {
+              if (link.source === node) break;
+              offset += link.width + py / 2;
+            }
+            const dy = (y - offset - target.y0) * alpha * (value / Math.min(node.value, target.value));
+            target.y0 += dy;
+            target.y1 += dy;
+            y += width + py / 2;
           }
         });
       });
@@ -221,9 +217,17 @@ export default function() {
     function relaxRightToLeft(alpha) {
       columns.slice().reverse().forEach(function(nodes) {
         nodes.forEach(function(node) {
-          if (node.sourceLinks.length) {
-            var dy = (sum(node.sourceLinks, weightedTarget) / sum(node.sourceLinks, value) - nodeCenter(node)) * alpha;
-            node.y0 += dy, node.y1 += dy;
+          let y = node.y0;
+          for (const {source, width, value} of node.targetLinks.sort(ascendingSourceBreadth)) {
+            let offset = 0;
+            for (const link of source.sourceLinks) {
+              if (link.target === node) break;
+              offset += link.width + py / 2;
+            }
+            const dy = (y - offset - source.y0) * alpha * (value / Math.min(node.value, source.value));
+            source.y0 += dy;
+            source.y1 += dy;
+            y += width + py / 2;
           }
         });
       });
