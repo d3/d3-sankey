@@ -45,7 +45,7 @@ export default function Sankey() {
       align = justify,
       nodes = defaultNodes,
       links = defaultLinks,
-      iterations = 1;
+      iterations = 6;
 
   function sankey() {
     var graph = {nodes: nodes.apply(null, arguments), links: links.apply(null, arguments)};
