@@ -206,14 +206,16 @@ export default function Sankey() {
         nodes.forEach(function(node) {
           let y = node.y0;
           for (const {target, width, value} of node.sourceLinks.sort(ascendingTargetBreadth)) {
-            let offset = 0;
-            for (const link of target.targetLinks) {
-              if (link.source === node) break;
-              offset += link.width + py / 2;
+            if (value > 0) {
+              let dy = 0;
+              for (const {source, width} of target.targetLinks) {
+                if (source === node) break;
+                dy += width + py / 2;
+              }
+              dy = (y - dy - target.y0) * alpha * (value / Math.min(node.value, target.value));
+              target.y0 += dy;
+              target.y1 += dy;
             }
-            const dy = (y - offset - target.y0) * alpha * (value / Math.min(node.value, target.value));
-            target.y0 += dy;
-            target.y1 += dy;
             y += width + py / 2;
           }
         });
@@ -225,14 +227,16 @@ export default function Sankey() {
         nodes.forEach(function(node) {
           let y = node.y0;
           for (const {source, width, value} of node.targetLinks.sort(ascendingSourceBreadth)) {
-            let offset = 0;
-            for (const link of source.sourceLinks) {
-              if (link.target === node) break;
-              offset += link.width + py / 2;
+            if (value > 0) {
+              let dy = 0;
+              for (const {target, width} of source.sourceLinks) {
+                if (target === node) break;
+                dy += width + py / 2;
+              }
+              dy = (y - dy - source.y0) * alpha * (value / Math.min(node.value, source.value));
+              source.y0 += dy;
+              source.y1 += dy;
             }
-            const dy = (y - offset - source.y0) * alpha * (value / Math.min(node.value, source.value));
-            source.y0 += dy;
-            source.y1 += dy;
             y += width + py / 2;
           }
         });
