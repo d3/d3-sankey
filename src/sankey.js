@@ -165,7 +165,8 @@ export default function Sankey() {
 
     var kx = (x1 - x0 - dx) / (x - 1);
     graph.nodes.forEach(function(node) {
-      node.x1 = (node.x0 = x0 + Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x)))) * kx) + dx;
+      node.layer = Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x))));
+      node.x1 = (node.x0 = x0 + node.layer * kx) + dx;
     });
   }
 
@@ -179,7 +180,7 @@ export default function Sankey() {
     //
     initializeNodeBreadth();
     resolveCollisions();
-    for (var alpha = 0.9, n = iterations; n > 0; --n, alpha *= 0.9) {
+    for (var alpha = 0.95, n = iterations; n > 0; --n, alpha *= 0.95) {
       relaxRightToLeft(alpha);
       resolveCollisions();
       relaxLeftToRight(alpha);
@@ -209,16 +210,16 @@ export default function Sankey() {
           let y = node.y0;
           for (const {target, width, value} of node.sourceLinks.sort(ascendingTargetBreadth)) {
             if (value > 0) {
-              let dy = 0;
+              let dy = target.y0;
               for (const {source, width} of target.targetLinks) {
                 if (source === node) break;
-                dy += width + py / 2;
+                dy += width;
               }
-              dy = (y - dy - target.y0) * alpha * (value / Math.min(node.value, target.value));
+              dy = (y - dy) * Math.pow(alpha, target.layer - node.layer - 0.5) * value / target.value;
               target.y0 += dy;
               target.y1 += dy;
             }
-            y += width + py / 2;
+            y += width;
           }
         });
       });
@@ -230,16 +231,16 @@ export default function Sankey() {
           let y = node.y0;
           for (const {source, width, value} of node.targetLinks.sort(ascendingSourceBreadth)) {
             if (value > 0) {
-              let dy = 0;
+              let dy = source.y0;
               for (const {target, width} of source.sourceLinks) {
                 if (target === node) break;
-                dy += width + py / 2;
+                dy += width;
               }
-              dy = (y - dy - source.y0) * alpha * (value / Math.min(node.value, source.value));
+              dy = (y - dy) * Math.pow(alpha, node.layer - source.layer - 0.5) * value / source.value;
               source.y0 += dy;
               source.y1 += dy;
             }
-            y += width + py / 2;
+            y += width;
           }
         });
       });
