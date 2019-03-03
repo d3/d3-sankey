@@ -179,14 +179,17 @@ export default function Sankey() {
 
     //
     initializeNodeBreadth();
-    resolveCollisionsTopToBottom(1);
-    for (var alpha = 1, n = iterations; n > 0; --n, alpha *= 0.9) {
-      relaxRightToLeft(alpha);
-      relaxLeftToRight(alpha);
-      resolveCollisionsTopToBottom(0.5);
-      resolveCollisionsBottomToTop(0.5);
-      resolveCollisionsTopToBottom(1);
-      resolveCollisionsBottomToTop(1);
+    for (var i = 0, n = iterations; i < n; ++i) {
+      const a = Math.pow(0.99, i);
+      const b = (i + 1) / n;
+      reorderLinks();
+      relaxRightToLeft(a);
+      resolveCollisionsTopToBottom(b);
+      resolveCollisionsBottomToTop(b);
+      reorderLinks();
+      relaxLeftToRight(a);
+      resolveCollisionsTopToBottom(b);
+      resolveCollisionsBottomToTop(b);
     }
 
     function initializeNodeBreadth() {
@@ -196,8 +199,11 @@ export default function Sankey() {
 
       columns.forEach(function(nodes) {
         if (sort != null) nodes.sort(sort);
-        nodes.forEach(function(node, i) {
-          node.y1 = (node.y0 = i) + node.value * ky;
+        let y = y0;
+        nodes.forEach(function(node) {
+          node.y0 = y;
+          node.y1 = y + node.value * ky;
+          y = node.y1 + py;
         });
       });
 
@@ -205,45 +211,77 @@ export default function Sankey() {
         link.width = link.value * ky;
       });
     }
+    // Returns the target.y0 that would produce a straight link from source to target.
+    function targetTop(source, target) {
+      let y = source.y0;
+      for (const {target: node, width} of source.sourceLinks) {
+        if (node === target) break;
+        y += width;
+      }
+      for (const {source: node, width} of target.targetLinks) {
+        if (node === source) break;
+        y -= width;
+      }
+      return y;
+    }
 
-    function relaxLeftToRight(alpha) {
+    // Returns the source.y0 that would produce a straight link from source to target.
+    function sourceTop(source, target) {
+      let y = target.y0;
+      for (const {source: node, width} of target.targetLinks) {
+        if (node === source) break;
+        y += width;
+      }
+      for (const {target: node, width} of source.sourceLinks) {
+        if (node === target) break;
+        y -= width;
+      }
+      return y;
+    }
+
+    function reorderLinks() {
       columns.forEach(function(nodes) {
         nodes.forEach(function(node) {
-          let y = node.y0;
-          for (const {target, width, value} of node.sourceLinks.sort(ascendingTargetBreadth)) {
-            if (value > 0) {
-              let dy = target.y0;
-              for (const {source, width} of target.targetLinks) {
-                if (source === node) break;
-                dy += width;
-              }
-              dy = (y - dy) * Math.pow(alpha, target.layer - node.layer - 0.5) * value / target.value;
-              target.y0 += dy;
-              target.y1 += dy;
-            }
-            y += width;
-          }
+          node.sourceLinks.sort(ascendingTargetBreadth);
+          node.targetLinks.sort(ascendingSourceBreadth);
         });
       });
     }
 
-    function relaxRightToLeft(alpha) {
-      columns.slice().reverse().forEach(function(nodes) {
-        nodes.forEach(function(node) {
-          let y = node.y0;
-          for (const {source, width, value} of node.targetLinks.sort(ascendingSourceBreadth)) {
-            if (value > 0) {
-              let dy = source.y0;
-              for (const {target, width} of source.sourceLinks) {
-                if (target === node) break;
-                dy += width;
-              }
-              dy = (y - dy) * Math.pow(alpha, node.layer - source.layer - 0.5) * value / source.value;
-              source.y0 += dy;
-              source.y1 += dy;
-            }
-            y += width;
+    // Reposition each node based on its incoming (target) links.
+    function relaxLeftToRight(alpha) {
+      columns.slice(1).forEach(function(nodes) {
+        nodes.forEach(function(target) {
+          let y = 0;
+          let w = 0;
+          for (const {source, value} of target.targetLinks) {
+            let v = value * (target.layer - source.layer);
+            y += targetTop(source, target) * v;
+            w += v;
           }
+          if (!(w > 0)) return;
+          let dy = (y / w - target.y0) * alpha;
+          target.y0 += dy;
+          target.y1 += dy;
+        });
+      });
+    }
+
+    // Reposition each node based on its outgoing (source) links.
+    function relaxRightToLeft(alpha) {
+      columns.slice(0, -1).reverse().forEach(function(nodes) {
+        nodes.forEach(function(source) {
+          let y = 0;
+          let w = 0;
+          for (const {target, value} of source.sourceLinks) {
+            let v = value * (target.layer - source.layer);
+            y += sourceTop(source, target) * v;
+            w += v;
+          }
+          if (!(w > 0)) return;
+          let dy = (y / w - source.y0) * alpha;
+          source.y0 += dy;
+          source.y1 += dy;
         });
       });
     }
@@ -260,7 +298,7 @@ export default function Sankey() {
         for (i = 0; i < n; ++i) {
           node = nodes[i];
           dy = (y - node.y0) * alpha;
-          if (dy > 0) node.y0 += dy, node.y1 += dy;
+          if (dy > 1e-6) node.y0 += dy, node.y1 += dy;
           y = node.y1 + py;
         }
       });
@@ -277,8 +315,8 @@ export default function Sankey() {
         if (sort === undefined) nodes.sort(ascendingBreadth);
         for (i = n - 1; i >= 0; --i) {
           node = nodes[i];
-          dy = (y - node.y1) * alpha;
-          if (dy < 0) node.y0 += dy, node.y1 += dy;
+          dy = (node.y1 - y) * alpha;
+          if (dy > 1e-6) node.y0 -= dy, node.y1 -= dy;
           y = node.y0 - py;
         }
       });
