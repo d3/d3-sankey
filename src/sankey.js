@@ -137,9 +137,10 @@ export default function Sankey() {
   // nodes with no incoming links are assigned depth zero, while
   // nodes with no outgoing links are assigned the maximum depth.
   function computeNodeDepths(graph) {
-    var nodes, next, x;
+    var nodes, next, x, n = graph.nodes.length;
 
     for (nodes = graph.nodes, next = [], x = 0; nodes.length; ++x, nodes = next, next = []) {
+      if (x > n) throw new Error("circular link");
       nodes.forEach(function(node) {
         node.depth = x;
         node.sourceLinks.forEach(function(link) {
@@ -151,6 +152,7 @@ export default function Sankey() {
     }
 
     for (nodes = graph.nodes, next = [], x = 0; nodes.length; ++x, nodes = next, next = []) {
+      if (x > n) throw new Error("circular link");
       nodes.forEach(function(node) {
         node.height = x;
         node.targetLinks.forEach(function(link) {
