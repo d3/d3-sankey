@@ -180,10 +180,12 @@ export default function Sankey() {
     //
     initializeNodeBreadth();
     resolveCollisionsTopToBottom(1);
-    for (var alpha = 0.95, n = iterations; n > 0; --n, alpha *= 0.95) {
+    for (var alpha = 1, n = iterations; n > 0; --n, alpha *= 0.9) {
       relaxRightToLeft(alpha);
-      resolveCollisionsTopToBottom(1);
       relaxLeftToRight(alpha);
+      resolveCollisionsTopToBottom(0.5);
+      resolveCollisionsBottomToTop(0.5);
+      resolveCollisionsTopToBottom(1);
       resolveCollisionsBottomToTop(1);
     }
 
@@ -246,6 +248,7 @@ export default function Sankey() {
       });
     }
 
+    // Push any overlapping nodes down.
     function resolveCollisionsTopToBottom(alpha) {
       columns.forEach(function(nodes) {
         var node,
@@ -253,8 +256,6 @@ export default function Sankey() {
             y = y0,
             n = nodes.length,
             i;
-
-        // Push any overlapping nodes down.
         if (sort === undefined) nodes.sort(ascendingBreadth);
         for (i = 0; i < n; ++i) {
           node = nodes[i];
@@ -262,23 +263,10 @@ export default function Sankey() {
           if (dy > 0) node.y0 += dy, node.y1 += dy;
           y = node.y1 + py;
         }
-
-        // If the bottommost node goes outside the bounds, push it back up.
-        dy = (y - py - y1) * alpha;
-        if (dy > 0) {
-          y = (node.y0 -= dy), node.y1 -= dy;
-
-          // Push any overlapping nodes back up.
-          for (i = n - 2; i >= 0; --i) {
-            node = nodes[i];
-            dy = (node.y1 + py - y) * alpha;
-            if (dy > 0) node.y0 -= dy, node.y1 -= dy;
-            y = node.y0;
-          }
-        }
       });
     }
 
+    // Push any overlapping nodes up.
     function resolveCollisionsBottomToTop(alpha) {
       columns.forEach(function(nodes) {
         var node,
@@ -286,28 +274,12 @@ export default function Sankey() {
             y = y1,
             n = nodes.length,
             i;
-
-        // Push any overlapping nodes up.
         if (sort === undefined) nodes.sort(ascendingBreadth);
         for (i = n - 1; i >= 0; --i) {
           node = nodes[i];
           dy = (y - node.y1) * alpha;
           if (dy < 0) node.y0 += dy, node.y1 += dy;
           y = node.y0 - py;
-        }
-
-        // If the topmost node goes outside the bounds, push it back down.
-        dy = (y + py - y0) * alpha;
-        if (dy < 0) {
-          node.y0 -= dy, y = (node.y1 -= dy);
-
-          // Push any overlapping nodes back down.
-          for (i = 1; i < n; ++i) {
-            node = nodes[i];
-            dy = (node.y0 - py - y) * alpha;
-            if (dy < 0) node.y0 -= dy, node.y1 -= dy;
-            y = node.y1;
-          }
         }
       });
     }
