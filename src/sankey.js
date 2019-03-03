@@ -314,7 +314,7 @@ export default function Sankey() {
 
   // Returns the target.y0 that would produce an ideal link from source to target.
   function targetTop(source, target) {
-    let y = source.y0;
+    let y = source.y0 - (source.sourceLinks.length - 1) * py / 2;
     for (const {target: node, width} of source.sourceLinks) {
       if (node === target) break;
       y += width + py;
@@ -328,7 +328,7 @@ export default function Sankey() {
 
   // Returns the source.y0 that would produce an ideal link from source to target.
   function sourceTop(source, target) {
-    let y = target.y0;
+    let y = target.y0 - (target.targetLinks.length - 1) * py / 2;
     for (const {source: node, width} of target.targetLinks) {
       if (node === source) break;
       y += width + py;
