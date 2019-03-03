@@ -37,6 +37,34 @@ function find(nodeById, id) {
   return node;
 }
 
+// Returns the target.y0 that would produce a straight link from source to target.
+function targetTop(source, target) {
+  let y = source.y0;
+  for (const {target: node, width} of source.sourceLinks) {
+    if (node === target) break;
+    y += width;
+  }
+  for (const {source: node, width} of target.targetLinks) {
+    if (node === source) break;
+    y -= width;
+  }
+  return y;
+}
+
+// Returns the source.y0 that would produce a straight link from source to target.
+function sourceTop(source, target) {
+  let y = target.y0;
+  for (const {source: node, width} of target.targetLinks) {
+    if (node === source) break;
+    y += width;
+  }
+  for (const {target: node, width} of source.sourceLinks) {
+    if (node === target) break;
+    y -= width;
+  }
+  return y;
+}
+
 export default function Sankey() {
   var x0 = 0, y0 = 0, x1 = 1, y1 = 1, // extent
       dx = 24, // nodeWidth
@@ -210,33 +238,6 @@ export default function Sankey() {
       graph.links.forEach(function(link) {
         link.width = link.value * ky;
       });
-    }
-    // Returns the target.y0 that would produce a straight link from source to target.
-    function targetTop(source, target) {
-      let y = source.y0;
-      for (const {target: node, width} of source.sourceLinks) {
-        if (node === target) break;
-        y += width;
-      }
-      for (const {source: node, width} of target.targetLinks) {
-        if (node === source) break;
-        y -= width;
-      }
-      return y;
-    }
-
-    // Returns the source.y0 that would produce a straight link from source to target.
-    function sourceTop(source, target) {
-      let y = target.y0;
-      for (const {source: node, width} of target.targetLinks) {
-        if (node === source) break;
-        y += width;
-      }
-      for (const {target: node, width} of source.sourceLinks) {
-        if (node === target) break;
-        y -= width;
-      }
-      return y;
     }
 
     function reorderLinks() {
