@@ -2,7 +2,7 @@
 
 Sankey diagrams visualize the directed flow between nodes in an acyclic network. For example, this diagram shows a possible scenario of UK energy production and consumption in 2050:
 
-[<img alt="Sankey diagram" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="960">](https://bl.ocks.org/mbostock/ca9a0bb7ba204d12974bca90acc507c0)
+[<img alt="Sankey diagram" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="960">](https://observablehq.com/@d3/sankey-diagram)
 
 Source: Department of Energy & Climate Change, Tom Counsell.
 
@@ -181,25 +181,25 @@ See [*sankey*.nodeAlign](#sankey_nodeAlign).
 
 <a name="sankeyLeft" href="#sankeyLeft">#</a> d3.<b>sankeyLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js#L7 "Source")
 
-<img alt="left" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-left.png" width="480">
+[<img alt="left" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-left.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=left)
 
 Returns *node*.depth.
 
 <a name="sankeyRight" href="#sankeyRight">#</a> d3.<b>sankeyRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js#L11 "Source")
 
-<img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">
+[<img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=right)
 
 Returns *n* - 1 - *node*.height.
 
 <a name="sankeyCenter" href="#sankeyCenter">#</a> d3.<b>sankeyCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js#L19 "Source")
 
-<img alt="center" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-center.png" width="480">
+[<img alt="center" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-center.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=center)
 
 Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any incoming links are moved as right as possible.
 
 <a name="sankeyJustify" href="#sankeyJustify">#</a> d3.<b>sankeyJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js#L15 "Source")
 
-<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">
+[<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">](https://observablehq.com/@d3/sankey-diagram)
 
 Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links are moved to the far right.
 
@@ -232,7 +232,7 @@ svg.append("g")
     .attr("stroke-opacity", 0.2)
   .selectAll("path")
   .data(graph.links)
-  .enter().append("path")
+  .join("path")
     .attr("d", d3.sankeyLinkHorizontal())
     .attr("stroke-width", function(d) { return d.width; });
 ```
