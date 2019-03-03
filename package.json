@@ -24,7 +24,7 @@
     "pretest": "rollup -c",
     "test": "tape 'test/**/*-test.js' && eslint src",
     "prepublishOnly": "rm -rf dist && yarn test",
-    "postpublish": "git push && git push --tags && zip -j build/d3-sankey.zip -- LICENSE README.md build/d3-sankey.js build/d3-sankey.min.js"
+    "postpublish": "git push && git push --tags && zip -j dist/d3-sankey.zip -- LICENSE README.md dist/d3-sankey.js dist/d3-sankey.min.js"
   },
   "dependencies": {
     "d3-array": "1",
