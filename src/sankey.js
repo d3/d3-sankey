@@ -43,7 +43,7 @@ export default function Sankey() {
       py = 8, // nodePadding
       id = defaultId,
       align = justify,
-      sort = ascendingBreadth,
+      sort,
       nodes = defaultNodes,
       links = defaultLinks,
       iterations = 6;
@@ -72,7 +72,7 @@ export default function Sankey() {
   };
 
   sankey.nodeSort = function(_) {
-    return arguments.length ? (sort = typeof _ === "function" ? _ : undefined, sankey) : sort;
+    return arguments.length ? (sort = _, sankey) : sort;
   };
 
   sankey.nodeWidth = function(_) {
@@ -190,6 +190,7 @@ export default function Sankey() {
       });
 
       columns.forEach(function(nodes) {
+        if (sort != null) nodes.sort(sort);
         nodes.forEach(function(node, i) {
           node.y1 = (node.y0 = i) + node.value * ky;
         });
@@ -247,7 +248,7 @@ export default function Sankey() {
             i;
 
         // Push any overlapping nodes down.
-        if (typeof sort === "function") nodes.sort(sort);
+        if (sort === undefined) nodes.sort(ascendingBreadth);
         for (i = 0; i < n; ++i) {
           node = nodes[i];
           dy = y - node.y0;
