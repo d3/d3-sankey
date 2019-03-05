@@ -132,11 +132,9 @@ export default function() {
   // Compute the value (size) of each node by summing the associated links.
   function computeNodeValues(graph) {
     graph.nodes.forEach(function(node) {
-      node.value = Math.max(
-        sum(node.sourceLinks, value),
-        sum(node.targetLinks, value),
-        typeof node.minValue !== 'undefined' ? node.minValue : 0
-      );
+      node.value = node.fixedValue === undefined
+          ? Math.max(sum(node.sourceLinks, value), sum(node.targetLinks, value))
+          : node.minValue
     });
   }
 
