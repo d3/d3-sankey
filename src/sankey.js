@@ -135,7 +135,7 @@ export default function() {
       node.value = Math.max(
         sum(node.sourceLinks, value),
         sum(node.targetLinks, value),
-        typeof node.value !== 'undefined' ? node.value : 0
+        typeof node.minValue !== 'undefined' ? node.minValue : 0
       );
     });
   }
