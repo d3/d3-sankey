@@ -283,43 +283,18 @@ export default function Sankey() {
   }
 
   function resolveCollisions(nodes, alpha) {
-    resolveCollisionsInsideOut(nodes, alpha);
-    resolveCollisionsTopToBottom(nodes, alpha);
-    resolveCollisionsBottomToTop(nodes, alpha);
-  }
-
-  function resolveCollisionsInsideOut(nodes, alpha) {
-    const n = nodes.length;
-    const i = n >> 1;
+    const i = nodes.length >> 1;
     const subject = nodes[i];
-
-    // Push any preceeding nodes up. TODO resolveCollisionsBottomToTop
-    {
-      let y = subject.y0 - py;
-      for (let j = i - 1; j >= 0; --j) {
-        const node = nodes[j];
-        const dy = (node.y1 - y) * alpha;
-        if (dy > 1e-6) node.y0 -= dy, node.y1 -= dy;
-        y = node.y0 - py;
-      }
-    }
-
-    // Push any following nodes down. TODO resolveCollisionsTopToBottom
-    {
-      let y = subject.y1 + py;
-      for (let j = i + 1; j < n; ++j) {
-        const node = nodes[j];
-        const dy = (y - node.y0) * alpha;
-        if (dy > 1e-6) node.y0 += dy, node.y1 += dy;
-        y = node.y1 + py;
-      }
-    }
+    resolveCollisionsBottomToTop(nodes, subject.y0 - py, i - 1, alpha);
+    resolveCollisionsTopToBottom(nodes, subject.y1 + py, i + 1, alpha);
+    resolveCollisionsBottomToTop(nodes, y1, nodes.length - 1, alpha);
+    resolveCollisionsTopToBottom(nodes, y0, 0, alpha);
   }
 
   // Push any overlapping nodes down.
-  function resolveCollisionsTopToBottom(nodes, alpha) {
-    let y = y0;
-    for (const node of nodes) {
+  function resolveCollisionsTopToBottom(nodes, y, i, alpha) {
+    for (; i < nodes.length; ++i) {
+      const node = nodes[i];
       const dy = (y - node.y0) * alpha;
       if (dy > 1e-6) node.y0 += dy, node.y1 += dy;
       y = node.y1 + py;
@@ -327,9 +302,8 @@ export default function Sankey() {
   }
 
   // Push any overlapping nodes up.
-  function resolveCollisionsBottomToTop(nodes, alpha) {
-    let y = y1;
-    for (let n = nodes.length, i = n - 1; i >= 0; --i) {
+  function resolveCollisionsBottomToTop(nodes, y, i, alpha) {
+    for (; i >= 0; --i) {
       const node = nodes[i];
       const dy = (node.y1 - y) * alpha;
       if (dy > 1e-6) node.y0 -= dy, node.y1 -= dy;
