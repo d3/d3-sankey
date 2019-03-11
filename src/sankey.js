@@ -348,7 +348,7 @@ export default function Sankey() {
     }
   }
 
-  function reorderLinks({nodes}) {
+  function reorderLinks(nodes) {
     if (linkSort === undefined) {
       for (const {sourceLinks, targetLinks} of nodes) {
         sourceLinks.sort(ascendingTargetBreadth);
