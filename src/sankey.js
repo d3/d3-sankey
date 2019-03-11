@@ -44,6 +44,7 @@ export default function Sankey() {
       id = defaultId,
       align = justify,
       sort,
+      linkSort,
       nodes = defaultNodes,
       links = defaultLinks,
       iterations = 6;
@@ -89,6 +90,10 @@ export default function Sankey() {
 
   sankey.links = function(_) {
     return arguments.length ? (links = typeof _ === "function" ? _ : constant(_), sankey) : links;
+  };
+
+  sankey.linkSort = function(_) {
+    return arguments.length ? (linkSort = _, sankey) : linkSort;
   };
 
   sankey.size = function(_) {
@@ -182,11 +187,11 @@ export default function Sankey() {
     for (var i = 0, n = iterations; i < n; ++i) {
       const a = Math.pow(0.99, i);
       const b = (i + 1) / n;
-      reorderLinks();
+      reorderLinks(graph);
       relaxRightToLeft(a);
       resolveCollisionsTopToBottom(b);
       resolveCollisionsBottomToTop(b);
-      reorderLinks();
+      reorderLinks(graph);
       relaxLeftToRight(a);
       resolveCollisionsTopToBottom(b);
       resolveCollisionsBottomToTop(b);
@@ -210,14 +215,10 @@ export default function Sankey() {
       graph.links.forEach(function(link) {
         link.width = link.value * ky;
       });
-    }
 
-    function reorderLinks() {
-      columns.forEach(function(nodes) {
-        nodes.forEach(function(node) {
-          node.sourceLinks.sort(ascendingTargetBreadth);
-          node.targetLinks.sort(ascendingSourceBreadth);
-        });
+      if (linkSort != null) graph.nodes.forEach(function(node) {
+        node.sourceLinks.sort(linkSort);
+        node.targetLinks.sort(linkSort);
       });
     }
 
@@ -296,11 +297,15 @@ export default function Sankey() {
     }
   }
 
-  function computeLinkBreadths(graph) {
-    graph.nodes.forEach(function(node) {
+  function reorderLinks(graph) {
+    if (linkSort === undefined) graph.nodes.forEach(function(node) {
       node.sourceLinks.sort(ascendingTargetBreadth);
       node.targetLinks.sort(ascendingSourceBreadth);
     });
+  }
+
+  function computeLinkBreadths(graph) {
+    reorderLinks(graph);
     graph.nodes.forEach(function(node) {
       var y0 = node.y0, y1 = y0;
       node.sourceLinks.forEach(function(link) {
