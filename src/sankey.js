@@ -229,8 +229,8 @@ export default function Sankey() {
     const columns = computeNodeLayers(graph);
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {
-      const alpha = Math.pow(0.99, i);
-      const beta = (i + 1) / iterations;
+      const beta = ((i + 1) / iterations) ** 1.5;
+      const alpha = 1 - beta;
       relaxRightToLeft(columns, alpha, beta);
       relaxLeftToRight(columns, alpha, beta);
     }
