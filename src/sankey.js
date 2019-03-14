@@ -146,7 +146,7 @@ export default function Sankey() {
       node.value = node.fixedValue === undefined
           ? Math.max(sum(node.sourceLinks, value), sum(node.targetLinks, value))
           : node.fixedValue
-    });
+    }
   }
 
   function computeNodeDepths({nodes}) {
