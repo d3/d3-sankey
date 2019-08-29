@@ -10,6 +10,7 @@ function ascendingTargetBreadth(a, b) {
   return ascendingBreadth(a.target, b.target) || a.index - b.index;
 }
 
+// Sort ascending on y position
 function ascendingBreadth(a, b) {
   return a.y0 - b.y0;
 }
@@ -36,6 +37,7 @@ function find(nodeById, id) {
   return node;
 }
 
+// compute y position of the start and end of links
 function computeLinkBreadths({nodes}) {
   for (const node of nodes) {
     let y0 = node.y0;
@@ -126,8 +128,8 @@ export default function Sankey() {
   function computeNodeLinks({nodes, links}) {
     for (const [i, node] of nodes.entries()) {
       node.index = i;
-      node.sourceLinks = [];
-      node.targetLinks = [];
+      node.sourceLinks = []; // links for which this node is a source
+      node.targetLinks = []; // links for which this node is a target
     }
     const nodeById = new Map(nodes.map((d, i) => [id(d, i, nodes), d]));
     for (const [i, link] of links.entries()) {
@@ -149,6 +151,7 @@ export default function Sankey() {
     }
   }
 
+  // compute node "depth" calculated from left to right for align function
   function computeNodeDepths({nodes}) {
     const n = nodes.length;
     let current = new Set(nodes);
@@ -156,7 +159,7 @@ export default function Sankey() {
     let x = 0;
     while (current.size) {
       for (const node of current) {
-        node.depth = x;
+        node.depth = x; // depth on horizontal axis
         for (const {target} of node.sourceLinks) {
           next.add(target);
         }
@@ -167,6 +170,7 @@ export default function Sankey() {
     }
   }
 
+  // compute node "height" calculated from right to left for align function
   function computeNodeHeights({nodes}) {
     const n = nodes.length;
     let current = new Set(nodes);
@@ -185,11 +189,15 @@ export default function Sankey() {
     }
   }
 
+  // Use align fn and node's depth or height to put them into the right layer / column
+  // Also use this to set node x positions
   function computeNodeLayers({nodes}) {
-    const x = max(nodes, d => d.depth) + 1;
+    const x = max(nodes, d => d.depth) + 1; // num depths
+    // amount to increase the x with per layer index
     const kx = (x1 - x0 - dx) / (x - 1);
     const columns = new Array(x);
     for (const node of nodes) {
+      // use align fn to put node into right column / layer index
       const i = Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x))));
       node.layer = i;
       node.x0 = x0 + i * kx;
@@ -204,8 +212,10 @@ export default function Sankey() {
   }
 
   function initializeNodeBreadths(columns) {
+    // Find the smallest scale to multiply node & link values with to fit the graph height
     const ky = min(columns, c => (y1 - y0 - (c.length - 1) * py) / sum(c, value));
     for (const nodes of columns) {
+      // set nodes height and links width according to their value
       let y = y0;
       for (const node of nodes) {
         node.y0 = y;
@@ -215,6 +225,8 @@ export default function Sankey() {
           link.width = link.value * ky;
         }
       }
+      // space out the nodes so that the remaining space is
+      // evenly divided between and around them
       y = (y1 - y + py) / (nodes.length + 1);
       for (let i = 0; i < nodes.length; ++i) {
         const node = nodes[i];
@@ -228,6 +240,11 @@ export default function Sankey() {
   function computeNodeBreadths(graph) {
     const columns = computeNodeLayers(graph);
     initializeNodeBreadths(columns);
+    // Iteratively find a good layout by doing left-to-right and
+    // right-to-left sweeps, each time placing neighboring nodes
+    // at the weighted average of the positions of connected nodes.
+    // The alpha and beta blend between the current
+    // position and the desired new position of the node.
     for (let i = 0; i < iterations; ++i) {
       const alpha = Math.pow(0.99, i);
       const beta = Math.max(1 - alpha, (i + 1) / iterations);
@@ -242,7 +259,7 @@ export default function Sankey() {
       const column = columns[i];
       for (const target of column) {
         let y = 0;
-        let w = 0;
+        let w = 0; // weighted average
         for (const {source, value} of target.targetLinks) {
           let v = value * (target.layer - source.layer);
           y += targetTop(source, target) * v;
@@ -265,8 +282,11 @@ export default function Sankey() {
       const column = columns[i];
       for (const source of column) {
         let y = 0;
-        let w = 0;
+        let w = 0; // weighted average
         for (const {target, value} of source.sourceLinks) {
+          // Find ideal y pos to connect source to this target,
+          // give more weight to connections with
+          // higher value or that span more layers
           let v = value * (target.layer - source.layer);
           y += sourceTop(source, target) * v;
           w += v;
@@ -334,10 +354,12 @@ export default function Sankey() {
   // Returns the target.y0 that would produce an ideal link from source to target.
   function targetTop(source, target) {
     let y = source.y0 - (source.sourceLinks.length - 1) * py / 2;
+    // position below higher links on the source side
     for (const {target: node, width} of source.sourceLinks) {
       if (node === target) break;
       y += width + py;
     }
+    // position above higher links on the target side
     for (const {source: node, width} of target.targetLinks) {
       if (node === source) break;
       y -= width;
@@ -348,10 +370,12 @@ export default function Sankey() {
   // Returns the source.y0 that would produce an ideal link from source to target.
   function sourceTop(source, target) {
     let y = target.y0 - (target.targetLinks.length - 1) * py / 2;
+    // position below higher links on the target side
     for (const {source: node, width} of target.targetLinks) {
       if (node === source) break;
       y += width + py;
     }
+    // position above higher links on the source side
     for (const {target: node, width} of source.sourceLinks) {
       if (node === target) break;
       y -= width;
