@@ -140,12 +140,11 @@ export default function Sankey() {
     }
   }
 
-  // Compute the value (size) of each node by summing the associated links.
   function computeNodeValues({nodes}) {
     for (const node of nodes) {
       node.value = node.fixedValue === undefined
           ? Math.max(sum(node.sourceLinks, value), sum(node.targetLinks, value))
-          : node.fixedValue
+          : node.fixedValue;
     }
   }
 
