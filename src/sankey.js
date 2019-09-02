@@ -54,7 +54,7 @@ function computeLinkBreadths({nodes}) {
 export default function Sankey() {
   let x0 = 0, y0 = 0, x1 = 1, y1 = 1; // extent
   let dx = 24; // nodeWidth
-  let py = 8; // nodePadding
+  let dy = 8, py; // nodePadding
   let id = defaultId;
   let align = justify;
   let sort;
@@ -96,7 +96,7 @@ export default function Sankey() {
   };
 
   sankey.nodePadding = function(_) {
-    return arguments.length ? (py = +_, sankey) : py;
+    return arguments.length ? (dy = py = +_, sankey) : dy;
   };
 
   sankey.nodes = function(_) {
@@ -226,6 +226,7 @@ export default function Sankey() {
 
   function computeNodeBreadths(graph) {
     const columns = computeNodeLayers(graph);
+    py = Math.min(dy, (y1 - y0) / (max(columns, c => c.length) - 1));
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {
       const alpha = Math.pow(0.99, i);
