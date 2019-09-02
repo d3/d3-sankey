@@ -67,6 +67,7 @@ Each *node* must be an object. The following properties are assigned by the [San
 * *node*.index - the node’s zero-based index within the array of nodes
 * *node*.depth - the node’s zero-based graph depth, derived from the graph topology
 * *node*.height - the node’s zero-based graph height, derived from the graph topology
+* *node*.layer - the node’s zero-based column index, corresponding to its horizontal position
 * *node*.x0 - the node’s minimum horizontal position, derived from *node*.depth
 * *node*.x1 - the node’s maximum horizontal position (*node*.x0 + [*sankey*.nodeWidth](#sankey_nodeWidth))
 * *node*.y0 - the node’s minimum vertical position
