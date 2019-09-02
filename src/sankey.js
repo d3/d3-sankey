@@ -138,6 +138,12 @@ export default function Sankey() {
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     }
+    if (linkSort != null) {
+      for (const {sourceLinks, targetLinks} of nodes) {
+        sourceLinks.sort(linkSort);
+        targetLinks.sort(linkSort);
+      }
+    }
   }
 
   function computeNodeValues({nodes}) {
