@@ -34,6 +34,7 @@
     "d3-array": "1 - 2",
     "d3-shape": "^1.2.0"
   },
+  "sideEffects": false,
   "devDependencies": {
     "eslint": "6",
     "rollup": "1",
