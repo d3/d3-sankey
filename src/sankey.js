@@ -1,5 +1,6 @@
 import {max, min, sum} from "d3-array";
 import {justify} from "./align.js";
+import {horizontal} from "./orientation.js";
 import constant from "./constant.js";
 
 function ascendingSourceBreadth(a, b) {
@@ -51,12 +52,20 @@ function computeLinkBreadths({nodes}) {
   }
 }
 
+function orientNodes({nodes}, orientation) {
+  for (const node of nodes) {
+    [node.x0, node.y0] = orientation(node.x0, node.y0);
+    [node.x1, node.y1] = orientation(node.x1, node.y1);
+  }
+}
+
 export default function Sankey() {
   let x0 = 0, y0 = 0, x1 = 1, y1 = 1; // extent
   let dx = 24; // nodeWidth
   let dy = 8, py; // nodePadding
   let id = defaultId;
   let align = justify;
+  let orientation = horizontal;
   let sort;
   let linkSort;
   let nodes = defaultNodes;
@@ -71,6 +80,7 @@ export default function Sankey() {
     computeNodeHeights(graph);
     computeNodeBreadths(graph);
     computeLinkBreadths(graph);
+    orientNodes(graph, orientation);
     return graph;
   }
 
