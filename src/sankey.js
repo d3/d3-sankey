@@ -1,6 +1,7 @@
 import {max, min, sum} from "d3-array";
 import {justify} from "./align.js";
 import {horizontal, vertical} from "./orientation.js";
+import {sankeyLinkHorizontal, sankeyLinkVertical} from "./sankeyLink.js";
 import constant from "./constant.js";
 
 function ascendingSourceBreadth(a, b) {
@@ -119,6 +120,10 @@ export default function Sankey() {
 
   sankey.links = function(_) {
     return arguments.length ? (links = typeof _ === "function" ? _ : constant(_), sankey) : links;
+  };
+
+  sankey.linkShape = function() {
+    return orientation === vertical ? sankeyLinkVertical() : sankeyLinkHorizontal();
   };
 
   sankey.linkSort = function(_) {
