@@ -75,6 +75,7 @@ export default function Sankey() {
 
   function sankey() {
     const graph = {nodes: nodes.apply(null, arguments), links: links.apply(null, arguments)};
+    orientExtents();
     computeNodeLinks(graph);
     computeNodeValues(graph);
     computeNodeDepths(graph);
@@ -83,6 +84,11 @@ export default function Sankey() {
     computeLinkBreadths(graph);
     orientNodes(graph, orientation);
     return graph;
+  }
+
+  function orientExtents() {
+    [x0, y0] = orientation(x0, y0);
+    [x1, y1] = orientation(x1, y1);
   }
 
   sankey.update = function(graph) {
