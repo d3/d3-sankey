@@ -1,6 +1,6 @@
 import {max, min, sum} from "d3-array";
 import {justify} from "./align.js";
-import {horizontal} from "./orientation.js";
+import {horizontal, vertical} from "./orientation.js";
 import constant from "./constant.js";
 
 function ascendingSourceBreadth(a, b) {
@@ -95,6 +95,10 @@ export default function Sankey() {
 
   sankey.nodeAlign = function(_) {
     return arguments.length ? (align = typeof _ === "function" ? _ : constant(_), sankey) : align;
+  };
+
+  sankey.nodeOrientation = function(_) {
+    return arguments.length ? (orientation = _, sankey) : orientation;
   };
 
   sankey.nodeSort = function(_) {
