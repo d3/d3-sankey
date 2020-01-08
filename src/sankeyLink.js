@@ -8,7 +8,7 @@ function horizontalTarget(d) {
   return [d.target.x0, d.y1];
 }
 
-export default function() {
+export function sankeyLinkHorizontal() {
   return linkHorizontal()
       .source(horizontalSource)
       .target(horizontalTarget);
