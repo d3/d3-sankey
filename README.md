@@ -100,6 +100,10 @@ For convenience, a link’s source and target may be initialized using numeric o
 * *link*.width - the link’s width (proportional to *link*.value)
 * *link*.index - the zero-based index of *link* within the array of links
 
+<a name="sankey_linkShape" href="#sankey_linkShape">#</a> <i>sankey</i>.<b>linkShape</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Returns a [link shape](https://github.com/d3/d3-shape#links) suitable for rendering paths between the nodes of this Sankey diagram.  This will return either a [horizontal](#sankeyLinkHorizontal) or [vertical](#sankeyLinkVertical) link shape.
+
 <a name="sankey_linkSort" href="#sankey_linkSort">#</a> <i>sankey</i>.<b>linkSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
 If *sort* is specified, sets the link sort method and returns this Sankey generator. If *sort* is not specified, returns the current link sort method, which defaults to *undefined*, indicating that vertical order of links within each node will be determined automatically by the layout. If *sort* is null, the order is fixed by the input. Otherwise, the specified *sort* function determines the order; the function is passed two links, and must return a value less than 0 if the first link should be above the second, and a value greater than 0 if the second link should be above the first, or 0 if the order is not specified.
@@ -216,23 +220,13 @@ Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links 
 
 ### Links
 
-<a name="sankeyLinkHorizontal" href="#sankeyLinkHorizontal">#</a> d3.<b>sankeyLinkHorizontal</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLinkHorizontal.js "Source")
+<a name="sankeyLinkHorizontal" href="#sankeyLinkHorizontal">#</a> d3.<b>sankeyLinkHorizontal</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLink.js "Source")
 
-Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkHorizontal) suitable for a Sankey diagram. The [source accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_source) is defined as:
+Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkHorizontal) suitable for a Sankey diagram rendered in a horizontal orientation.
 
-```js
-function source(d) {
-  return [d.source.x1, d.y0];
-}
-```
+<a name="sankeyLinkVertical" href="#sankeyLinkVertical">#</a> d3.<b>sankeyLinkVertical</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLink.js "Source")
 
-The [target accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_target) is defined as:
-
-```js
-function target(d) {
-  return [d.target.x0, d.y1];
-}
-```
+Returns a [vertical link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkVertical) suitable for a Sankey diagram rendered in a vertical orientation.
 
 For example, to render the links of a Sankey diagram in SVG, you might say:
 
@@ -244,6 +238,6 @@ svg.append("g")
   .selectAll("path")
   .data(graph.links)
   .join("path")
-    .attr("d", d3.sankeyLinkHorizontal())
+    .attr("d", graph.linkShape())
     .attr("stroke-width", function(d) { return d.width; });
 ```
