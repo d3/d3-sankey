@@ -55,8 +55,10 @@ function computeLinkBreadths({nodes}) {
 
 function orientNodes({nodes}, orientation) {
   for (const node of nodes) {
-    [node.x0, node.y0] = orientation(node.x0, node.y0);
-    [node.x1, node.y1] = orientation(node.x1, node.y1);
+    const topLeft = orientation(node.x0, node.y0);
+    const bottomRight = orientation(node.x1, node.y1);
+    node.x0 = topLeft[0], node.y0 = topLeft[1];
+    node.x1 = bottomRight[0], node.y1 = bottomRight[1];
   }
 }
 
@@ -87,8 +89,10 @@ export default function Sankey() {
   }
 
   function orientExtents() {
-    [x0, y0] = orientation(x0, y0);
-    [x1, y1] = orientation(x1, y1);
+    const topLeft = orientation(x0, y0);
+    const bottomRight = orientation(x1, y1);
+    x0 = topLeft[0], y0 = topLeft[1];
+    x1 = bottomRight[0], y1 = bottomRight[1];
   }
 
   sankey.update = function(graph) {
