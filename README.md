@@ -222,22 +222,6 @@ Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any incoming links 
 
 Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links are moved to the far right.
 
-### Orientations
-
-See [*sankey*.nodeOrientation](#sankey_nodeOrientation).
-
-<a name="sankeyHorizontal" href="#sankeyHorizontal">#</a> d3.<b>sankeyHorizontal</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
-
-<img alt="horizontal" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-horizontal.png" width="480">
-
-Returns horizontally oriented <i>x</i>, <i>y</i>.
-
-<a name="sankeyVertical" href="#sankeyVertical">#</a> d3.<b>sankeyVertical</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
-
-<img alt="vertical" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-vertical.png" width="480">
-
-Returns vertically oriented <i>x</i>, <i>y</i>.
-
 ### Links
 
 <a name="sankeyLinkHorizontal" href="#sankeyLinkHorizontal">#</a> d3.<b>sankeyLinkHorizontal</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLink.js "Source")
@@ -261,3 +245,19 @@ svg.append("g")
     .attr("d", graph.linkShape())
     .attr("stroke-width", function(d) { return d.width; });
 ```
+
+### Orientations
+
+See [*sankey*.nodeOrientation](#sankey_nodeOrientation).
+
+<a name="sankeyHorizontal" href="#sankeyHorizontal">#</a> d3.<b>sankeyHorizontal</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+
+<img alt="horizontal" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-horizontal.png" width="480">
+
+Returns horizontally oriented <i>x</i>, <i>y</i>.
+
+<a name="sankeyVertical" href="#sankeyVertical">#</a> d3.<b>sankeyVertical</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+
+<img alt="vertical" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-vertical.png" width="480">
+
+Returns vertically oriented <i>x</i>, <i>y</i>.
