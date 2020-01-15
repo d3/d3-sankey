@@ -162,6 +162,10 @@ This is particularly useful when representing graphs in JSON, as JSON does not a
 
 If *align* is specified, sets the node [alignment method](#alignments) to the specified function and returns this Sankey generator. If *align* is not specified, returns the current node alignment method, which defaults to [d3.sankeyJustify](#sankeyJustify). The specified function is evaluated for each input *node* in order, being passed the current *node* and the total depth *n* of the graph (one plus the maximum *node*.depth), and must return an integer between 0 and *n* - 1 that indicates the desired horizontal position of the node in the generated Sankey diagram.
 
+<a name="sankey_nodeOrientation" href="#sankey_nodeOrientation">#</a> <i>sankey</i>.<b>nodeOrientation</b>([<i>orientation</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+If *orientation* is specified, sets the node [orientation method](#orientations) to the specified function and returns this Sankey generator. If *orientation* is not specified, returns the current node orientation method, which defaults to [d3.sankeyHorizontal](#sankeyHorizontal).
+
 <a name="sankey_nodeSort" href="#sankey_nodeSort">#</a> <i>sankey</i>.<b>nodeSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
 If *sort* is specified, sets the node sort method and returns this Sankey generator. If *sort* is not specified, returns the current node sort method, which defaults to *undefined*, indicating that vertical order of nodes within each column will be determined automatically by the layout. If *sort* is null, the order is fixed by the input. Otherwise, the specified *sort* function determines the order; the function is passed two nodes, and must return a value less than 0 if the first node should be above the second, and a value greater than 0 if the second node should be above the first, or 0 if the order is not specified.
@@ -217,6 +221,22 @@ Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any incoming links 
 [<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">](https://observablehq.com/@d3/sankey-diagram)
 
 Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links are moved to the far right.
+
+### Orientations
+
+See [*sankey*.nodeOrientation](#sankey_nodeOrientation).
+
+<a name="sankeyHorizontal" href="#sankeyHorizontal">#</a> d3.<b>sankeyHorizontal</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+
+<img alt="horizontal" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-horizontal.png" width="480">
+
+Returns horizontally oriented <i>x</i>, <i>y</i>.
+
+<a name="sankeyVertical" href="#sankeyVertical">#</a> d3.<b>sankeyVertical</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+
+<img alt="vertical" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-vertical.png" width="480">
+
+Returns vertically oriented <i>x</i>, <i>y</i>.
 
 ### Links
 
