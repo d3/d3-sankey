@@ -251,7 +251,7 @@ export default function Sankey() {
         node.y1 = y + node.value * ky;
         y = node.y1 + py;
         for (const link of node.sourceLinks) {
-          link.width = link.value * Math.abs(ky);
+          link.width = link.value * ky;
         }
       }
       let z = orientation === orientUp ? y0 : y1;
