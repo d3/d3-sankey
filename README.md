@@ -164,7 +164,7 @@ If *align* is specified, sets the node [alignment method](#alignments) to the sp
 
 <a name="sankey_nodeOrientation" href="#sankey_nodeOrientation">#</a> <i>sankey</i>.<b>nodeOrientation</b>([<i>orientation</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
-If *orientation* is specified, sets the node [orientation method](#orientations) to the specified function and returns this Sankey generator. If *orientation* is not specified, returns the current node orientation method, which defaults to [d3.sankeyHorizontal](#sankeyHorizontal).
+If *orientation* is specified, sets the node [orientation method](#orientations) to the specified function and returns this Sankey generator. If *orientation* is not specified, returns the current node orientation method, which defaults to [d3.orientRight](#orientRight).
 
 <a name="sankey_nodeSort" href="#sankey_nodeSort">#</a> <i>sankey</i>.<b>nodeSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
@@ -250,14 +250,9 @@ svg.append("g")
 
 See [*sankey*.nodeOrientation](#sankey_nodeOrientation).
 
-<a name="sankeyHorizontal" href="#sankeyHorizontal">#</a> d3.<b>sankeyHorizontal</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+Four Sankey diagram rendering orientations are currently available:
 
-<img alt="horizontal" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-horizontal.png" width="480">
-
-Returns horizontally oriented <i>x</i>, <i>y</i>.
-
-<a name="sankeyVertical" href="#sankeyVertical">#</a> d3.<b>sankeyVertical</b>(<i>x</i>, <i>y</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
-
-<img alt="vertical" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/orientation-vertical.png" width="480">
-
-Returns vertically oriented <i>x</i>, <i>y</i>.
+* <a name="orientUp" href="#orientUp">#</a> d3.<b>orientUp</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+* <a name="orientDown" href="#orientDown">#</a> d3.<b>orientDown</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+* <a name="orientLeft" href="#orientLeft">#</a> d3.<b>orientLeft</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
+* <a name="orientRight" href="#orientRight">#</a> d3.<b>orientRight</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
