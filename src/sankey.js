@@ -1,6 +1,6 @@
 import {max, min, sum} from "d3-array";
 import {justify} from "./align.js";
-import {sankeyHorizontal, sankeyVertical} from "./orientation.js";
+import {orientRight} from "./orientation.js";
 import {sankeyLinkHorizontal, sankeyLinkVertical} from "./sankeyLink.js";
 import constant from "./constant.js";
 
@@ -69,7 +69,7 @@ export default function Sankey() {
   let dy = 8, py; // nodePadding
   let id = defaultId;
   let align = justify;
-  let orientation = sankeyHorizontal;
+  let orientation = orientRight;
   let sort;
   let linkSort;
   let nodes = defaultNodes;
@@ -135,7 +135,8 @@ export default function Sankey() {
   };
 
   sankey.linkShape = function() {
-    return orientation === sankeyVertical ? sankeyLinkVertical() : sankeyLinkHorizontal();
+    const node = orientation(0, 0, 0, 1);
+    return node.x0 || node.x1 ? sankeyLinkVertical() : sankeyLinkHorizontal();
   };
 
   sankey.linkSort = function(_) {
