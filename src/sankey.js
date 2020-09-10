@@ -249,7 +249,7 @@ export default function Sankey() {
         node.y1 = y + node.value * ky;
         y = node.y1 + py;
         for (const link of node.sourceLinks) {
-          link.width = link.value * ky;
+          link.width = link.value * Math.abs(ky);
         }
       }
       y = (y1 - y + py) / (nodes.length + 1);
