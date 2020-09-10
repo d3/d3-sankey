@@ -1,6 +1,6 @@
 import {max, min, sum} from "d3-array";
 import {justify} from "./align.js";
-import {orientUp, orientRight, orientDown, orientLeft} from "./orientation.js";
+import {orientUp, orientDown, orientLeft, orientRight} from "./orientation.js";
 import {sankeyLinkHorizontal, sankeyLinkVertical} from "./sankeyLink.js";
 import constant from "./constant.js";
 
@@ -274,10 +274,8 @@ export default function Sankey() {
     for (let i = 0; i < iterations; ++i) {
       const alpha = Math.pow(0.99, i);
       const beta = Math.max(1 - alpha, (i + 1) / iterations);
-      /*
       relaxRightToLeft(columns, alpha, beta);
       relaxLeftToRight(columns, alpha, beta);
-      */
     }
   }
 
@@ -329,11 +327,14 @@ export default function Sankey() {
 
   function resolveCollisions(nodes, alpha) {
     const i = nodes.length >> 1;
-    const subject = nodes[i];
-    resolveCollisionsBottomToTop(nodes, subject.y0 - py, i - 1, alpha);
-    resolveCollisionsTopToBottom(nodes, subject.y1 + py, i + 1, alpha);
-    resolveCollisionsBottomToTop(nodes, y1, nodes.length - 1, alpha);
-    resolveCollisionsTopToBottom(nodes, y0, 0, alpha);
+    const node = nodes[i];
+    const inverted = {y0: node.y1, y1: node.y0};
+    const subject = orientation === orientUp ? inverted : node;
+    const dir = orientation === orientUp ? -1 : 1;
+    resolveCollisionsBottomToTop(nodes, subject.y0 - py * dir, i - dir, alpha);
+    resolveCollisionsTopToBottom(nodes, subject.y1 + py * dir, i + dir, alpha);
+    resolveCollisionsBottomToTop(nodes, orientation === orientUp ? y0 : y1, nodes.length - 1, alpha);
+    resolveCollisionsTopToBottom(nodes, orientation === orientUp ? y1 : y0, 0, alpha);
   }
 
   // Push any overlapping nodes down.
