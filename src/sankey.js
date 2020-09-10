@@ -1,6 +1,6 @@
 import {max, min, sum} from "d3-array";
 import {justify} from "./align.js";
-import {orientRight} from "./orientation.js";
+import {orientUp, orientRight, orientDown, orientLeft} from "./orientation.js";
 import {sankeyLinkHorizontal, sankeyLinkVertical} from "./sankeyLink.js";
 import constant from "./constant.js";
 
@@ -135,8 +135,8 @@ export default function Sankey() {
   };
 
   sankey.linkShape = function() {
-    const node = orientation(0, 0, 0, 1);
-    return node.x0 || node.x1 ? sankeyLinkVertical() : sankeyLinkHorizontal();
+    const horizontal = [orientLeft, orientRight];
+    return horizontal.includes(orientation) ? sankeyLinkHorizontal() : sankeyLinkVertical();
   };
 
   sankey.linkSort = function(_) {
@@ -224,13 +224,15 @@ export default function Sankey() {
 
   function computeNodeLayers({nodes}) {
     const x = max(nodes, d => d.depth) + 1;
-    const kx = (x1 - x0 - dx) / (x - 1);
+    const kx = (Math.abs(x1 - x0) - dx) / (x - 1);
+    const origin = orientation === orientUp ? x1 : x0;
+    const dir = orientation === orientLeft || orientation === orientUp ? -1 : 1;
     const columns = new Array(x);
     for (const node of nodes) {
       const i = Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x))));
       node.layer = i;
-      node.x0 = x0 + i * kx;
-      node.x1 = node.x0 + dx;
+      node.x0 = origin + i * kx * dir;
+      node.x1 = node.x0 + dx * dir;
       if (columns[i]) columns[i].push(node);
       else columns[i] = [node];
     }
@@ -241,9 +243,9 @@ export default function Sankey() {
   }
 
   function initializeNodeBreadths(columns) {
-    const ky = min(columns, c => (y1 - y0 - (c.length - 1) * py) / sum(c, value));
+    const ky = min(columns, c => (Math.abs(y1 - y0) - (c.length - 1) * py) / sum(c, value));
     for (const nodes of columns) {
-      let y = y0;
+      let y = orientation === orientUp ? y1 : y0;
       for (const node of nodes) {
         node.y0 = y;
         node.y1 = y + node.value * ky;
@@ -252,7 +254,8 @@ export default function Sankey() {
           link.width = link.value * Math.abs(ky);
         }
       }
-      y = (y1 - y + py) / (nodes.length + 1);
+      let z = orientation === orientUp ? y0 : y1;
+      y = (z - y + py) / (nodes.length + 1);
       for (let i = 0; i < nodes.length; ++i) {
         const node = nodes[i];
         node.y0 += y * (i + 1);
@@ -264,13 +267,17 @@ export default function Sankey() {
 
   function computeNodeBreadths(graph) {
     const columns = computeNodeLayers(graph);
-    py = Math.min(dy, (y1 - y0) / (max(columns, c => c.length) - 1));
+    const horizontal = [orientLeft, orientRight];
+    const breadth = horizontal.includes(orientation) ? x1 - x0 : y1 - y0;
+    py = Math.min(dy, Math.abs(breadth) / (max(columns, c => c.length) - 1));
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {
       const alpha = Math.pow(0.99, i);
       const beta = Math.max(1 - alpha, (i + 1) / iterations);
+      /*
       relaxRightToLeft(columns, alpha, beta);
       relaxLeftToRight(columns, alpha, beta);
+      */
     }
   }
 
