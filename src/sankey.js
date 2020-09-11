@@ -254,8 +254,8 @@ export default function Sankey() {
           link.width = link.value * ky;
         }
       }
-      let z = orientation === orientUp ? y0 : y1;
-      y = (z - y + py) / (nodes.length + 1);
+      let ymax = orientation === orientUp ? y0 : y1;
+      y = (ymax - y + py) / (nodes.length + 1);
       for (let i = 0; i < nodes.length; ++i) {
         const node = nodes[i];
         node.y0 += y * (i + 1);
