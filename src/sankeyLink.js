@@ -10,8 +10,8 @@ function horizontalTarget(d) {
 
 export function sankeyLinkHorizontal() {
   return linkHorizontal()
-    .source(horizontalSource)
-    .target(horizontalTarget);
+      .source(horizontalSource)
+      .target(horizontalTarget);
 }
 
 function verticalSource(d) {
@@ -24,6 +24,6 @@ function verticalTarget(d) {
 
 export function sankeyLinkVertical() {
   return linkVertical()
-    .source(verticalSource)
-    .target(verticalTarget);
+      .source(verticalSource)
+      .target(verticalTarget);
 }
