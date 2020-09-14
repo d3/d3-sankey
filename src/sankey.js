@@ -299,7 +299,7 @@ export default function Sankey() {
 
   // Push any overlapping nodes down.
   function resolveCollisionsTopToBottom(nodes, y, i, alpha) {
-    for (; i < nodes.length; ++i) {
+    for (; i >= 0 && i < nodes.length; ++i) {
       const node = nodes[i];
       const dy = (y - node.y0) * alpha;
       if (dy > 1e-6) node.y0 += dy, node.y1 += dy;
@@ -309,7 +309,7 @@ export default function Sankey() {
 
   // Push any overlapping nodes up.
   function resolveCollisionsBottomToTop(nodes, y, i, alpha) {
-    for (; i >= 0; --i) {
+    for (; i >= 0 && i < nodes.length; --i) {
       const node = nodes[i];
       const dy = (node.y1 - y) * alpha;
       if (dy > 1e-6) node.y0 -= dy, node.y1 -= dy;
