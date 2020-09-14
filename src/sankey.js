@@ -143,8 +143,7 @@ function Sankey(orient) {
   };
 
   sankey.linkShape = function() {
-    const horizontal = [left, right];
-    return horizontal.includes(orient) ? sankeyLinkHorizontal() : sankeyLinkVertical();
+    return [left, right].includes(orient) ? sankeyLinkHorizontal() : sankeyLinkVertical();
   };
 
   sankey.linkSort = function(_) {
@@ -275,8 +274,7 @@ function Sankey(orient) {
 
   function computeNodeBreadths(graph) {
     const columns = computeNodeLayers(graph);
-    const horizontal = [left, right];
-    const breadth = horizontal.includes(orient) ? x1 - x0 : y1 - y0;
+    const breadth = [left, right].includes(orient) ? x1 - x0 : y1 - y0;
     py = Math.min(dy, Math.abs(breadth) / (max(columns, c => c.length) - 1));
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {
