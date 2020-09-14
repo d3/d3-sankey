@@ -27,9 +27,21 @@ var sankey = d3.sankey();
 
 ## API Reference
 
-<a href="#sankey" name="sankey">#</a> d3.<b>sankey</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+<a href="#sankeyTop" name="sankeyTop">#</a> d3.<b>sankeyTop</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
-Constructs a new Sankey generator with the default settings.
+Constructs a new top-oriented Sankey generator with the default settings.
+
+<a href="#sankeyRight" name="sankeyRight">#</a> d3.<b>sankeyRight</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Constructs a new right-oriented Sankey generator with the default settings.
+
+<a href="#sankeyBottom" name="sankeyBottom">#</a> d3.<b>sankeyBottom</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Constructs a new bottom-oriented Sankey generator with the default settings.
+
+<a href="#sankeyLeft" name="sankeyLeft">#</a> d3.<b>sankeyLeft</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Constructs a new left-oriented Sankey generator with the default settings.
 
 <a href="#_sankey" name="_sankey">#</a> <i>sankey</i>(<i>arguments</i>…) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
@@ -162,10 +174,6 @@ This is particularly useful when representing graphs in JSON, as JSON does not a
 
 If *align* is specified, sets the node [alignment method](#alignments) to the specified function and returns this Sankey generator. If *align* is not specified, returns the current node alignment method, which defaults to [d3.sankeyJustify](#sankeyJustify). The specified function is evaluated for each input *node* in order, being passed the current *node* and the total depth *n* of the graph (one plus the maximum *node*.depth), and must return an integer between 0 and *n* - 1 that indicates the desired horizontal position of the node in the generated Sankey diagram.
 
-<a name="sankey_nodeOrientation" href="#sankey_nodeOrientation">#</a> <i>sankey</i>.<b>nodeOrientation</b>([<i>orientation</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
-
-If *orientation* is specified, sets the node [orientation method](#orientations) to the specified function and returns this Sankey generator. If *orientation* is not specified, returns the current node orientation method, which defaults to [d3.orientRight](#orientRight).
-
 <a name="sankey_nodeSort" href="#sankey_nodeSort">#</a> <i>sankey</i>.<b>nodeSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
 If *sort* is specified, sets the node sort method and returns this Sankey generator. If *sort* is not specified, returns the current node sort method, which defaults to *undefined*, indicating that vertical order of nodes within each column will be determined automatically by the layout. If *sort* is null, the order is fixed by the input. Otherwise, the specified *sort* function determines the order; the function is passed two nodes, and must return a value less than 0 if the first node should be above the second, and a value greater than 0 if the second node should be above the first, or 0 if the order is not specified.
@@ -198,29 +206,29 @@ If *iterations* is specified, sets the number of relaxation iterations when [gen
 
 See [*sankey*.nodeAlign](#sankey_nodeAlign).
 
-<a name="sankeyLeft" href="#sankeyLeft">#</a> d3.<b>sankeyLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignLeft" href="#sankeyAlignLeft">#</a> d3.<b>sankeyAlignLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
 
 [<img alt="left" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-left.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=left)
 
 Returns *node*.depth.
 
-<a name="sankeyRight" href="#sankeyRight">#</a> d3.<b>sankeyRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignRight" href="#sankeyAlignRight">#</a> d3.<b>sankeyAlignRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
 
 [<img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=right)
 
 Returns *n* - 1 - *node*.height.
 
-<a name="sankeyCenter" href="#sankeyCenter">#</a> d3.<b>sankeyCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignCenter" href="#sankeyAlignCenter">#</a> d3.<b>sankeyAlignCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
 
 [<img alt="center" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-center.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=center)
 
-Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any incoming links are moved as right as possible.
+Like [d3.sankeyAlignLeft](#sankeyAlignLeft), except that nodes without any incoming links are moved as right as possible.
 
-<a name="sankeyJustify" href="#sankeyJustify">#</a> d3.<b>sankeyJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignJustify" href="#sankeyAlignJustify">#</a> d3.<b>sankeyAlignJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
 
 [<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">](https://observablehq.com/@d3/sankey-diagram)
 
-Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links are moved to the far right.
+Like [d3.sankeyAlignLeft](#sankeyAlignLeft), except that nodes without any outgoing links are moved to the far right.
 
 ### Links
 
@@ -245,14 +253,3 @@ svg.append("g")
     .attr("d", graph.linkShape())
     .attr("stroke-width", function(d) { return d.width; });
 ```
-
-### Orientations
-
-See [*sankey*.nodeOrientation](#sankey_nodeOrientation).
-
-Four Sankey diagram rendering orientations are currently available:
-
-* <a name="orientUp" href="#orientUp">#</a> d3.<b>orientUp</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
-* <a name="orientDown" href="#orientDown">#</a> d3.<b>orientDown</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
-* <a name="orientLeft" href="#orientLeft">#</a> d3.<b>orientLeft</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
-* <a name="orientRight" href="#orientRight">#</a> d3.<b>orientRight</b> [<>](https://github.com/d3/d3-sankey/blob/master/src/orientation.js "Source")
