@@ -252,21 +252,21 @@ function Sankey(orientation) {
   function initializeNodeBreadths(columns) {
     const ky = min(columns, c => (Math.abs(y1 - y0) - (c.length - 1) * py) / sum(c, value));
     for (const nodes of columns) {
-      let ystart = orientation === bottom ? y1 : y0;
+      let yStart = orientation === bottom ? y1 : y0;
       for (const node of nodes) {
-        node.y0 = ystart;
-        node.y1 = ystart + node.value * ky;
-        ystart = node.y1 + py;
+        node.y0 = yStart;
+        node.y1 = yStart + node.value * ky;
+        yStart = node.y1 + py;
         for (const link of node.sourceLinks) {
           link.width = link.value * ky;
         }
       }
-      let yend = orientation === bottom ? y0 : y1;
-      ystart = (yend - ystart + py) / (nodes.length + 1);
+      let yEnd = orientation === bottom ? y0 : y1;
+      yStart = (yEnd - yStart + py) / (nodes.length + 1);
       for (let i = 0; i < nodes.length; ++i) {
         const node = nodes[i];
-        node.y0 += ystart * (i + 1);
-        node.y1 += ystart * (i + 1);
+        node.y0 += yStart * (i + 1);
+        node.y1 += yStart * (i + 1);
       }
       reorderLinks(nodes);
     }
