@@ -4,12 +4,12 @@ import {transformTop, transformRight, transformBottom, transformLeft} from "./tr
 import {sankeyLinkHorizontal, sankeyLinkVertical} from "./sankeyLink.js";
 import constant from "./constant.js";
 
-var top = 1,
+const top = 1,
     right = 2,
     bottom = 3,
     left = 4;
 
-var transforms = {
+const transforms = {
     [top]: transformTop,
     [right]: transformRight,
     [bottom]: transformBottom,
