@@ -65,13 +65,13 @@ function computeLinkBreadths({nodes}) {
   }
 }
 
-function Sankey(orient) {
+function Sankey(orientation) {
   let x0 = 0, y0 = 0, x1 = 1, y1 = 1; // extent
   let dx = 24; // nodeWidth
   let dy = 8, py; // nodePadding
   let id = defaultId;
   let align = justify;
-  let transform = transforms[orient];
+  let transform = transforms[orientation];
   let sort;
   let linkSort;
   let nodes = defaultNodes;
@@ -143,7 +143,7 @@ function Sankey(orient) {
   };
 
   sankey.linkShape = function() {
-    return [left, right].includes(orient) ? sankeyLinkHorizontal() : sankeyLinkVertical();
+    return [left, right].includes(orientation) ? sankeyLinkHorizontal() : sankeyLinkVertical();
   };
 
   sankey.linkSort = function(_) {
@@ -232,8 +232,8 @@ function Sankey(orient) {
   function computeNodeLayers({nodes}) {
     const x = max(nodes, d => d.depth) + 1;
     const kx = (Math.abs(x1 - x0) - dx) / (x - 1);
-    const origin = orient === bottom ? x1 : x0;
-    const dir = orient === left || orient === bottom ? -1 : 1;
+    const origin = orientation === bottom ? x1 : x0;
+    const dir = orientation === left || orientation === bottom ? -1 : 1;
     const columns = new Array(x);
     for (const node of nodes) {
       const i = Math.max(0, Math.min(x - 1, Math.floor(align.call(null, node, x))));
@@ -252,7 +252,7 @@ function Sankey(orient) {
   function initializeNodeBreadths(columns) {
     const ky = min(columns, c => (Math.abs(y1 - y0) - (c.length - 1) * py) / sum(c, value));
     for (const nodes of columns) {
-      let ystart = orient === bottom ? y1 : y0;
+      let ystart = orientation === bottom ? y1 : y0;
       for (const node of nodes) {
         node.y0 = ystart;
         node.y1 = ystart + node.value * ky;
@@ -261,7 +261,7 @@ function Sankey(orient) {
           link.width = link.value * ky;
         }
       }
-      let yend = orient === bottom ? y0 : y1;
+      let yend = orientation === bottom ? y0 : y1;
       ystart = (yend - ystart + py) / (nodes.length + 1);
       for (let i = 0; i < nodes.length; ++i) {
         const node = nodes[i];
@@ -274,7 +274,7 @@ function Sankey(orient) {
 
   function computeNodeBreadths(graph) {
     const columns = computeNodeLayers(graph);
-    const breadth = [left, right].includes(orient) ? x1 - x0 : y1 - y0;
+    const breadth = [left, right].includes(orientation) ? x1 - x0 : y1 - y0;
     py = Math.min(dy, Math.abs(breadth) / (max(columns, c => c.length) - 1));
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {
@@ -335,12 +335,12 @@ function Sankey(orient) {
     const i = nodes.length >> 1;
     const node = nodes[i];
     const inverted = {y0: node.y1, y1: node.y0};
-    const subject = orient === bottom ? inverted : node;
-    const dir = orient === bottom ? -1 : 1;
+    const subject = orientation === bottom ? inverted : node;
+    const dir = orientation === bottom ? -1 : 1;
     resolveCollisionsBottomToTop(nodes, subject.y0 - py * dir, i - dir, alpha);
     resolveCollisionsTopToBottom(nodes, subject.y1 + py * dir, i + dir, alpha);
-    resolveCollisionsBottomToTop(nodes, orient === bottom ? y0 : y1, nodes.length - 1, alpha);
-    resolveCollisionsTopToBottom(nodes, orient === bottom ? y1 : y0, 0, alpha);
+    resolveCollisionsBottomToTop(nodes, orientation === bottom ? y0 : y1, nodes.length - 1, alpha);
+    resolveCollisionsTopToBottom(nodes, orientation === bottom ? y1 : y0, 0, alpha);
   }
 
   // Push any overlapping nodes down.
