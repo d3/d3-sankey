@@ -206,25 +206,25 @@ If *iterations* is specified, sets the number of relaxation iterations when [gen
 
 See [*sankey*.nodeAlign](#sankey_nodeAlign).
 
-<a name="sankeyAlignLeft" href="#sankeyAlignLeft">#</a> d3.<b>sankeyAlignLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
+<a name="sankeyAlignLeft" href="#sankeyAlignLeft">#</a> d3.<b>sankeyAlignLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="left" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-left.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=left)
 
 Returns *node*.depth.
 
-<a name="sankeyAlignRight" href="#sankeyAlignRight">#</a> d3.<b>sankeyAlignRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
+<a name="sankeyAlignRight" href="#sankeyAlignRight">#</a> d3.<b>sankeyAlignRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=right)
 
 Returns *n* - 1 - *node*.height.
 
-<a name="sankeyAlignCenter" href="#sankeyAlignCenter">#</a> d3.<b>sankeyAlignCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
+<a name="sankeyAlignCenter" href="#sankeyAlignCenter">#</a> d3.<b>sankeyAlignCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="center" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-center.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=center)
 
 Like [d3.sankeyAlignLeft](#sankeyAlignLeft), except that nodes without any incoming links are moved as right as possible.
 
-<a name="sankeyAlignJustify" href="#sankeyAlignJustify">#</a> d3.<b>sankeyAlignJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankeyAlign/blob/master/src/align.js "Source")
+<a name="sankeyAlignJustify" href="#sankeyAlignJustify">#</a> d3.<b>sankeyAlignJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">](https://observablehq.com/@d3/sankey-diagram)
 
