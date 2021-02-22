@@ -1,3 +1,3 @@
-export {default as sankey} from "./sankey.js";
-export {center as sankeyCenter, left as sankeyLeft, right as sankeyRight, justify as sankeyJustify} from "./align.js";
-export {default as sankeyLinkHorizontal} from "./sankeyLinkHorizontal.js";
+export {sankeyTop, sankeyRight, sankeyBottom, sankeyLeft} from "./sankey.js";
+export {center as sankeyAlignCenter, left as sankeyAlignLeft, right as sankeyAlignRight, justify as sankeyAlignJustify} from "./align.js";
+export {sankeyLinkHorizontal, sankeyLinkVertical} from "./sankeyLink.js";

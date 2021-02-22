@@ -27,9 +27,21 @@ var sankey = d3.sankey();
 
 ## API Reference
 
-<a href="#sankey" name="sankey">#</a> d3.<b>sankey</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+<a href="#sankeyTop" name="sankeyTop">#</a> d3.<b>sankeyTop</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
-Constructs a new Sankey generator with the default settings.
+Constructs a new top-oriented Sankey generator with the default settings.
+
+<a href="#sankeyRight" name="sankeyRight">#</a> d3.<b>sankeyRight</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Constructs a new right-oriented Sankey generator with the default settings.
+
+<a href="#sankeyBottom" name="sankeyBottom">#</a> d3.<b>sankeyBottom</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Constructs a new bottom-oriented Sankey generator with the default settings.
+
+<a href="#sankeyLeft" name="sankeyLeft">#</a> d3.<b>sankeyLeft</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Constructs a new left-oriented Sankey generator with the default settings.
 
 <a href="#_sankey" name="_sankey">#</a> <i>sankey</i>(<i>arguments</i>…) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
@@ -99,6 +111,10 @@ For convenience, a link’s source and target may be initialized using numeric o
 * *link*.y1 - the link’s vertical end position (at target node)
 * *link*.width - the link’s width (proportional to *link*.value)
 * *link*.index - the zero-based index of *link* within the array of links
+
+<a name="sankey_linkShape" href="#sankey_linkShape">#</a> <i>sankey</i>.<b>linkShape</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+
+Returns a [link shape](https://github.com/d3/d3-shape#links) suitable for rendering paths between the nodes of this Sankey diagram.  This will return either a [horizontal](#sankeyLinkHorizontal) or [vertical](#sankeyLinkVertical) link shape.
 
 <a name="sankey_linkSort" href="#sankey_linkSort">#</a> <i>sankey</i>.<b>linkSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
@@ -190,49 +206,39 @@ If *iterations* is specified, sets the number of relaxation iterations when [gen
 
 See [*sankey*.nodeAlign](#sankey_nodeAlign).
 
-<a name="sankeyLeft" href="#sankeyLeft">#</a> d3.<b>sankeyLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignLeft" href="#sankeyAlignLeft">#</a> d3.<b>sankeyAlignLeft</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="left" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-left.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=left)
 
 Returns *node*.depth.
 
-<a name="sankeyRight" href="#sankeyRight">#</a> d3.<b>sankeyRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignRight" href="#sankeyAlignRight">#</a> d3.<b>sankeyAlignRight</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="right" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-right.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=right)
 
 Returns *n* - 1 - *node*.height.
 
-<a name="sankeyCenter" href="#sankeyCenter">#</a> d3.<b>sankeyCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignCenter" href="#sankeyAlignCenter">#</a> d3.<b>sankeyAlignCenter</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="center" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/align-center.png" width="480">](https://observablehq.com/@d3/sankey-diagram?align=center)
 
-Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any incoming links are moved as right as possible.
+Like [d3.sankeyAlignLeft](#sankeyAlignLeft), except that nodes without any incoming links are moved as right as possible.
 
-<a name="sankeyJustify" href="#sankeyJustify">#</a> d3.<b>sankeyJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
+<a name="sankeyAlignJustify" href="#sankeyAlignJustify">#</a> d3.<b>sankeyAlignJustify</b>(<i>node</i>, <i>n</i>) [<>](https://github.com/d3/d3-sankey/blob/master/src/align.js "Source")
 
 [<img alt="justify" src="https://raw.githubusercontent.com/d3/d3-sankey/master/img/energy.png" width="480">](https://observablehq.com/@d3/sankey-diagram)
 
-Like [d3.sankeyLeft](#sankeyLeft), except that nodes without any outgoing links are moved to the far right.
+Like [d3.sankeyAlignLeft](#sankeyAlignLeft), except that nodes without any outgoing links are moved to the far right.
 
 ### Links
 
-<a name="sankeyLinkHorizontal" href="#sankeyLinkHorizontal">#</a> d3.<b>sankeyLinkHorizontal</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLinkHorizontal.js "Source")
+<a name="sankeyLinkHorizontal" href="#sankeyLinkHorizontal">#</a> d3.<b>sankeyLinkHorizontal</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLink.js "Source")
 
-Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkHorizontal) suitable for a Sankey diagram. The [source accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_source) is defined as:
+Returns a [horizontal link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkHorizontal) suitable for a Sankey diagram rendered in a horizontal orientation.
 
-```js
-function source(d) {
-  return [d.source.x1, d.y0];
-}
-```
+<a name="sankeyLinkVertical" href="#sankeyLinkVertical">#</a> d3.<b>sankeyLinkVertical</b>() [<>](https://github.com/d3/d3-sankey/blob/master/src/sankeyLink.js "Source")
 
-The [target accessor](https://github.com/d3/d3-shape/blob/master/README.md#link_target) is defined as:
-
-```js
-function target(d) {
-  return [d.target.x0, d.y1];
-}
-```
+Returns a [vertical link shape](https://github.com/d3/d3-shape/blob/master/README.md#linkVertical) suitable for a Sankey diagram rendered in a vertical orientation.
 
 For example, to render the links of a Sankey diagram in SVG, you might say:
 
@@ -244,6 +250,6 @@ svg.append("g")
   .selectAll("path")
   .data(graph.links)
   .join("path")
-    .attr("d", d3.sankeyLinkHorizontal())
+    .attr("d", graph.linkShape())
     .attr("stroke-width", function(d) { return d.width; });
 ```
