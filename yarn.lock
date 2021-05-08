@@ -617,9 +617,9 @@
     "type-check" "~0.3.2"
 
 "lodash@^4.17.12", "lodash@^4.17.14":
-  "integrity" "sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA=="
-  "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.20.tgz"
-  "version" "4.17.20"
+  "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
+  "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  "version" "4.17.21"
 
 "merge-stream@^2.0.0":
   "integrity" "sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w=="
