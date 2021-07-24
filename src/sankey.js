@@ -92,6 +92,7 @@ export default function Sankey() {
   };
 
   sankey.nodeWidth = function(_) {
+    console.log('test')
     return arguments.length ? (dx = +_, sankey) : dx;
   };
 
