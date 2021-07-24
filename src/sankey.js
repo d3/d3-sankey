@@ -135,6 +135,7 @@ export default function Sankey() {
       let {source, target} = link;
       if (typeof source !== "object") source = link.source = find(nodeById, source);
       if (typeof target !== "object") target = link.target = find(nodeById, target);
+      console.log(link)
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     }
