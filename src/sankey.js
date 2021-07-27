@@ -41,11 +41,11 @@ function computeLinkBreadths({nodes}) {
     let y0 = node.y0;
     let y1 = y0;
     for (const link of node.sourceLinks) {
-      link.y0 = y0 + link.width / 2;
+      link.y0 = y0 + link.width;
       y0 += link.width;
     }
     for (const link of node.targetLinks) {
-      link.y1 = y1 + link.width / 2;
+      link.y1 = y1 + link.width;
       y1 += link.width;
     }
   }
@@ -92,7 +92,6 @@ export default function Sankey() {
   };
 
   sankey.nodeWidth = function(_) {
-    console.log('test')
     return arguments.length ? (dx = +_, sankey) : dx;
   };
 
@@ -136,7 +135,6 @@ export default function Sankey() {
       let {source, target} = link;
       if (typeof source !== "object") source = link.source = find(nodeById, source);
       if (typeof target !== "object") target = link.target = find(nodeById, target);
-      console.log(link)
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     }
@@ -150,9 +148,7 @@ export default function Sankey() {
 
   function computeNodeValues({nodes}) {
     for (const node of nodes) {
-      node.value = node.fixedValue === undefined
-          ? Math.max(sum(node.sourceLinks, value), sum(node.targetLinks, value))
-          : node.fixedValue;
+      node.value = node.fixedValue;
     }
   }
 
@@ -219,7 +215,7 @@ export default function Sankey() {
         node.y1 = y + node.value * ky;
         y = node.y1 + py;
         for (const link of node.sourceLinks) {
-          link.width = link.value * ky;
+          link.width = link.originalWeight;
         }
       }
       y = (y1 - y + py) / (nodes.length + 1);
