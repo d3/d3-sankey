@@ -36,19 +36,22 @@ function find(nodeById, id) {
   return node;
 }
 
-function computeLinkBreadths({nodes}) {
-  for (const node of nodes) {
-    let y0 = node.y0;
-    let y1 = y0;
-    for (const link of node.sourceLinks) {
-      link.y0 = y0 + link.width;
-      y0 += link.width;
-    }
-    for (const link of node.targetLinks) {
-      link.y1 = y1 + link.width;
-      y1 += link.width;
-    }
-  }
+function computeLinkBreadths(graph) {
+  graph.nodes.forEach(function(node) {
+    node.sourceLinks.sort(ascendingTargetBreadth);
+    node.targetLinks.sort(ascendingSourceBreadth);
+  });
+  graph.nodes.forEach(function(node) {
+    var y0 = node.y0, y1 = y0;
+    node.sourceLinks.forEach(function(link) {
+      let extraSpace = (y0 + link.width / 2) / 100 * 10;
+      link.y0 = (y0 + link.width / 2) + extraSpace, y0 += link.width;
+    });
+    node.targetLinks.forEach(function(link) {
+      let extraSpace = (y0 + link.width / 2) / 100 * 10;
+      link.y1 = (y1 + link.width / 2) + extraSpace, y1 += link.width;
+    });
+  });
 }
 
 export default function Sankey() {
@@ -247,11 +250,6 @@ export default function Sankey() {
       for (const target of column) {
         let y = 0;
         let w = 0;
-        for (const {source, value} of target.targetLinks) {
-          let v = value * (target.layer - source.layer);
-          y += targetTop(source, target) * v;
-          w += v;
-        }
         if (!(w > 0)) continue;
         let dy = (y / w - target.y0) * alpha;
         target.y0 += dy;
@@ -270,11 +268,6 @@ export default function Sankey() {
       for (const source of column) {
         let y = 0;
         let w = 0;
-        for (const {target, value} of source.sourceLinks) {
-          let v = value * (target.layer - source.layer);
-          y += sourceTop(source, target) * v;
-          w += v;
-        }
         if (!(w > 0)) continue;
         let dy = (y / w - source.y0) * alpha;
         source.y0 += dy;
