@@ -45,12 +45,27 @@ function computeLinkBreadths(graph) {
     var y0 = node.y0, y1 = y0;
     node.sourceLinks.forEach(function(link) {
       let extraSpace = (y0 + link.width / 2) / 100 * 10;
-      link.y0 = (y0 + link.width / 2) + extraSpace, y0 += link.width;
+      link.y0 = (y0 + link.width / 2), y0 += link.width;
     });
     node.targetLinks.forEach(function(link) {
       let extraSpace = (y0 + link.width / 2) / 100 * 10;
-      link.y1 = (y1 + link.width / 2) + extraSpace, y1 += link.width;
+      link.y1 = (y1 + link.width / 2), y1 += link.width;
     });
+
+    // node.sourceLinks.forEach(function(link, index) {
+    //   if (index % 2 == 0) {
+    //     link.y0 += 10
+    //   } else {
+    //     link.y0 += 20
+    //   }
+    // });
+    // node.targetLinks.forEach(function(link, index) {
+    //   if (index % 2 == 0) {
+    //     link.y0 += 10
+    //   } else {
+    //     link.y0 += 20
+    //   }
+    // });
   });
 }
 
