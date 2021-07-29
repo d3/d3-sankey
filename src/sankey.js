@@ -44,28 +44,25 @@ function computeLinkBreadths(graph) {
   graph.nodes.forEach(function(node) {
     var y0 = node.y0, y1 = y0;
     node.sourceLinks.forEach(function(link) {
-      let extraSpace = (y0 + link.width / 2) / 100 * 10;
       link.y0 = (y0 + link.width / 2), y0 += link.width;
     });
     node.targetLinks.forEach(function(link) {
-      let extraSpace = (y0 + link.width / 2) / 100 * 10;
       link.y1 = (y1 + link.width / 2), y1 += link.width;
     });
+  });
+}
 
-    // node.sourceLinks.forEach(function(link, index) {
-    //   if (index % 2 == 0) {
-    //     link.y0 += 10
-    //   } else {
-    //     link.y0 += 20
-    //   }
-    // });
-    // node.targetLinks.forEach(function(link, index) {
-    //   if (index % 2 == 0) {
-    //     link.y0 += 10
-    //   } else {
-    //     link.y0 += 20
-    //   }
-    // });
+function optimizeNodes(graph) {
+  graph.nodes.forEach(function(node) {
+    let sourceLinksWidth = node.sourceLinks.map(link => link.width).reduce((a, b) => a + b, 0)
+    let targetLinksWidth = node.targetLinks.map(link => link.width).reduce((a, b) => a + b, 0)
+    let greatestLinksWidth = sourceLinksWidth > targetLinksWidth ? sourceLinksWidth : targetLinksWidth;
+
+    if (node.value < greatestLinksWidth) {
+      let differenceInWidth = greatestLinksWidth - node.value;
+
+      node.value += differenceInWidth;
+    }
   });
 }
 
@@ -89,6 +86,7 @@ export default function Sankey() {
     computeNodeHeights(graph);
     computeNodeBreadths(graph);
     computeLinkBreadths(graph);
+    optimizeNodes(graph)
     return graph;
   }
 
@@ -341,34 +339,6 @@ export default function Sankey() {
         targetLinks.sort(ascendingSourceBreadth);
       }
     }
-  }
-
-  // Returns the target.y0 that would produce an ideal link from source to target.
-  function targetTop(source, target) {
-    let y = source.y0 - (source.sourceLinks.length - 1) * py / 2;
-    for (const {target: node, width} of source.sourceLinks) {
-      if (node === target) break;
-      y += width + py;
-    }
-    for (const {source: node, width} of target.targetLinks) {
-      if (node === source) break;
-      y -= width;
-    }
-    return y;
-  }
-
-  // Returns the source.y0 that would produce an ideal link from source to target.
-  function sourceTop(source, target) {
-    let y = target.y0 - (target.targetLinks.length - 1) * py / 2;
-    for (const {source: node, width} of target.targetLinks) {
-      if (node === source) break;
-      y += width + py;
-    }
-    for (const {target: node, width} of source.sourceLinks) {
-      if (node === target) break;
-      y -= width;
-    }
-    return y;
   }
 
   return sankey;
