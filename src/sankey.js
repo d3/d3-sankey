@@ -51,7 +51,8 @@ function computeLinkBreadths({nodes}) {
   }
 }
 
-export default function Sankey() {
+export default function Sankey(isCustomVersion) {
+
   let x0 = 0, y0 = 0, x1 = 1, y1 = 1; // extent
   let dx = 24; // nodeWidth
   let dy = 8, py; // nodePadding
@@ -69,7 +70,7 @@ export default function Sankey() {
     computeNodeValues(graph);
     computeNodeDepths(graph);
     computeNodeHeights(graph);
-    computeNodeBreadths(graph);
+    isCustomVersion ? computeNodeBreadthsCustomVersion(graph) : computeNodeBreadths(graph);
     computeLinkBreadths(graph);
     return graph;
   }
@@ -242,6 +243,22 @@ export default function Sankey() {
     }
   }
 
+  function computeNodeBreadthsCustomVersion(graph) {
+    const columns = computeNodeLayers(graph);
+    py = Math.min(dy, (y1 - y0) / (max(columns, c => c.length) - 1));
+    initializeNodeBreadths(columns);
+    for (let i = 0; i < iterations; ++i) {
+      const beta = ((i + 1) / iterations) ** 1.5;
+      const alpha = 1 - beta;
+      relaxRightToLeft(columns, alpha, beta);
+      resolveCollisionsTopToBottomCustom(beta, columns);
+      resolveCollisionsBottomToTopCustom(beta, columns);
+      relaxLeftToRight(columns, alpha, beta);
+      resolveCollisionsTopToBottomCustom(beta, columns);
+      resolveCollisionsBottomToTopCustom(beta, columns);
+    }
+  }
+
   // Reposition each node based on its incoming (target) links.
   function relaxLeftToRight(columns, alpha, beta) {
     for (let i = 1, n = columns.length; i < n; ++i) {
@@ -260,8 +277,11 @@ export default function Sankey() {
         target.y1 += dy;
         reorderNodeLinks(target);
       }
-      if (sort === undefined) column.sort(ascendingBreadth);
-      resolveCollisions(column, beta);
+      if (!isCustomVersion) {
+        if (sort === undefined) column.sort(ascendingBreadth);
+        resolveCollisions(column, beta);
+      }
+
     }
   }
 
@@ -283,8 +303,12 @@ export default function Sankey() {
         source.y1 += dy;
         reorderNodeLinks(source);
       }
-      if (sort === undefined) column.sort(ascendingBreadth);
-      resolveCollisions(column, beta);
+
+      if (!isCustomVersion) {
+        if (sort === undefined) column.sort(ascendingBreadth);
+        resolveCollisions(column, beta);
+      }
+
     }
   }
 
@@ -297,7 +321,6 @@ export default function Sankey() {
     resolveCollisionsTopToBottom(nodes, y0, 0, alpha);
   }
 
-  // Push any overlapping nodes down.
   function resolveCollisionsTopToBottom(nodes, y, i, alpha) {
     for (; i < nodes.length; ++i) {
       const node = nodes[i];
@@ -315,6 +338,40 @@ export default function Sankey() {
       if (dy > 1e-6) node.y0 -= dy, node.y1 -= dy;
       y = node.y0 - py;
     }
+  }
+
+  // Push any overlapping nodes down.
+  function resolveCollisionsTopToBottomCustom(alpha, columns) {
+    columns.forEach(function(nodes) {
+      let node,
+          dy,
+          y = y0,
+          n = nodes.length,
+          i;
+      for (i = 0; i < n; ++i) {
+        node = nodes[i];
+        dy = (y - node.y0) * alpha;
+        if (dy > 1e-6) node.y0 += dy, node.y1 += dy;
+        y = node.y1 + py;
+      }
+    });
+  }
+
+  // Push any overlapping nodes up.
+  function resolveCollisionsBottomToTopCustom(alpha, columns) {
+    columns.forEach(function(nodes) {
+      let node,
+          dy,
+          y = y1,
+          n = nodes.length,
+          i;
+      for (i = n - 1; i >= 0; --i) {
+        node = nodes[i];
+        dy = (node.y1 - y) * alpha;
+        if (dy > 1e-6) node.y0 -= dy, node.y1 -= dy;
+        y = node.y0 - py;
+      }
+    });
   }
 
   function reorderNodeLinks({sourceLinks, targetLinks}) {
@@ -339,7 +396,7 @@ export default function Sankey() {
 
   // Returns the target.y0 that would produce an ideal link from source to target.
   function targetTop(source, target) {
-    let y = source.y0 - (source.sourceLinks.length - 1) * py / 2;
+    let y = isCustomVersion ? source.y0 : source.y0 - (source.sourceLinks.length - 1) * py / 2;
     for (const {target: node, width} of source.sourceLinks) {
       if (node === target) break;
       y += width + py;
@@ -353,7 +410,7 @@ export default function Sankey() {
 
   // Returns the source.y0 that would produce an ideal link from source to target.
   function sourceTop(source, target) {
-    let y = target.y0 - (target.targetLinks.length - 1) * py / 2;
+    let y = isCustomVersion ? target.y0 : target.y0 - (target.targetLinks.length - 1) * py / 2;
     for (const {source: node, width} of target.targetLinks) {
       if (node === source) break;
       y += width + py;
