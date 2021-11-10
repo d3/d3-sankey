@@ -8,6 +8,19 @@ Source: Department of Energy & Climate Change, Tom Counsell.
 
 **For an interactive editor, see [Flow-o-Matic](https://observablehq.com/@mbostock/flow-o-matic).**
 
+## Vizlib Customization
+
+This repository bases on d3-sankey (12.0.3) from github but introduces some customizations:
+- it doesn't use some original sorting lines of code as it breaks our sorting
+- it uses some pieces of code from older versions (resolving collisions, setting source/target y coords)
+
+During creation of Sankey instance you can choose our custom version by passing 'true' to constructor function or original (12.0.3) version by passing 'false'.
+
+The following snippet of code creates custom Sankey:
+```js
+const sankey = new Sankey(true)
+```
+
 ## Installing
 
 If you use NPM, `npm install d3-sankey`. Otherwise, download the [latest release](https://github.com/d3/d3-sankey/releases/latest). You can also load directly from [unpkg.com](https://unpkg.com/d3-sankey/). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
