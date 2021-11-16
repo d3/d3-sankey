@@ -15,14 +15,8 @@ jobs:
       - name: Find and Replace NPM name
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "\"d3-sankey\""
-          replace: "\"@vizlib/d3-sankey\""
-          include: "package.json"
-      - name: Find and Replace contributors script
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "\"contributors:update\": \"git-authors-cli\""
-          replace: "\"contributors:update\": \"echo Vizlib\""
+          find: "d3-sankey"
+          replace: "@vizlib/d3-sankey"
           include: "package.json"
       - uses: actions/setup-node@v2
         with:
@@ -31,11 +25,11 @@ jobs:
       - name: Replace NPM version
         run: |
           npm --no-git-tag-version version ${{ env.GITHUB_REF_SLUG }}
-      - name: Install dependencies
+      - name: Clean install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run deploy script
         run: |
-          npm ci
-      - name: Build & publish
-        run: |
-          npm publish
+          yarn publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

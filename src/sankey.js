@@ -51,7 +51,7 @@ function computeLinkBreadths({nodes}) {
   }
 }
 
-export default function Sankey(isCustomVersion) {
+export default function Sankey(config) {
 
   let x0 = 0, y0 = 0, x1 = 1, y1 = 1; // extent
   let dx = 24; // nodeWidth
@@ -70,7 +70,7 @@ export default function Sankey(isCustomVersion) {
     computeNodeValues(graph);
     computeNodeDepths(graph);
     computeNodeHeights(graph);
-    isCustomVersion ? computeNodeBreadthsCustomVersion(graph) : computeNodeBreadths(graph);
+    config.newCollisionResolver ? computeNodeBreadthsCustomVersion(graph) : computeNodeBreadths(graph);
     computeLinkBreadths(graph);
     return graph;
   }
@@ -277,7 +277,7 @@ export default function Sankey(isCustomVersion) {
         target.y1 += dy;
         reorderNodeLinks(target);
       }
-      if (!isCustomVersion) {
+      if (!config.newCollisionResolver) {
         if (sort === undefined) column.sort(ascendingBreadth);
         resolveCollisions(column, beta);
       }
@@ -304,7 +304,7 @@ export default function Sankey(isCustomVersion) {
         reorderNodeLinks(source);
       }
 
-      if (!isCustomVersion) {
+      if (!config.newCollisionResolver) {
         if (sort === undefined) column.sort(ascendingBreadth);
         resolveCollisions(column, beta);
       }
@@ -396,7 +396,7 @@ export default function Sankey(isCustomVersion) {
 
   // Returns the target.y0 that would produce an ideal link from source to target.
   function targetTop(source, target) {
-    let y = isCustomVersion ? source.y0 : source.y0 - (source.sourceLinks.length - 1) * py / 2;
+    let y = config.newCoordsSystem ? source.y0 : source.y0 - (source.sourceLinks.length - 1) * py / 2;
     for (const {target: node, width} of source.sourceLinks) {
       if (node === target) break;
       y += width + py;
@@ -410,7 +410,7 @@ export default function Sankey(isCustomVersion) {
 
   // Returns the source.y0 that would produce an ideal link from source to target.
   function sourceTop(source, target) {
-    let y = isCustomVersion ? target.y0 : target.y0 - (target.targetLinks.length - 1) * py / 2;
+    let y = config.newCoordsSystem ? target.y0 : target.y0 - (target.targetLinks.length - 1) * py / 2;
     for (const {source: node, width} of target.targetLinks) {
       if (node === source) break;
       y += width + py;

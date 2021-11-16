@@ -1,5 +1,5 @@
 {
-  "name": "@vizlib/d3-sankey",
+  "name": "d3-sankey",
   "version": "0.12.3",
   "description": "Visualize flow between nodes in a directed acyclic network.",
   "keywords": [
@@ -12,8 +12,8 @@
     "url": "https://bost.ocks.org/mike/"
   },
   "license": "BSD-3-Clause",
-  "main": "dist/@vizlib/d3-sankey.js",
-  "unpkg": "dist/@vizlib/d3-sankey.min.js",
+  "main": "dist/d3-sankey.js",
+  "unpkg": "dist/d3-sankey.min.js",
   "module": "src/index.js",
   "homepage": "https://github.com/d3/d3-sankey",
   "repository": {
@@ -27,7 +27,8 @@
   "scripts": {
     "pretest": "rollup -c",
     "test": "tape 'test/**/*-test.js' && eslint src",
-    "prepublishOnly": "rm -rf dist && npm run test"
+    "prepublishOnly": "rm -rf dist && yarn test",
+    "postpublish": "git push && git push --tags && zip -j dist/${npm_package_name}.zip -- LICENSE README.md dist/${npm_package_name}.js dist/${npm_package_name}.min.js"
   },
   "dependencies": {
     "d3-array": "1 - 2",
