@@ -14,11 +14,14 @@ This repository bases on d3-sankey (0.12.3) from Github but introduces some cust
 - it doesn't use some original sorting lines of code as it breaks our sorting
 - it uses some pieces of code from older versions (resolving collisions, setting source/target y coords)
 
-During creation of Sankey instance you can choose our custom version by passing 'true' to constructor function or original (0.12.3) version by passing 'false'.
+During creation of Sankey instance you need to pass a config to constructor function. The config object consists of 
+two properties: newCollisionResolver and newCoordsSystem. If you set both of them to false, then you will use
+not customized version of the library.
 
 The following snippet of code creates custom Sankey:
 ```js
-const sankey = new Sankey(true)
+const config = { newCollisionResolver: true, newCoordsSystem: true };
+const sankey = new Sankey(config)
 ```
 
 ## API Reference
