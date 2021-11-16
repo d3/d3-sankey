@@ -27,8 +27,7 @@
   "scripts": {
     "pretest": "rollup -c",
     "test": "tape 'test/**/*-test.js' && eslint src",
-    "prepublishOnly": "rm -rf dist && yarn test",
-    "postpublish": "git push && git push --tags && zip -j dist/${npm_package_name}.zip -- LICENSE README.md dist/${npm_package_name}.js dist/${npm_package_name}.min.js"
+    "prepublishOnly": "rm -rf dist && yarn test"
   },
   "dependencies": {
     "d3-array": "1 - 2",
