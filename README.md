@@ -15,12 +15,12 @@ This repository bases on d3-sankey (0.12.3) from Github but introduces some cust
 - it uses some pieces of code from older versions (resolving collisions, setting source/target y coords)
 
 During creation of Sankey instance you need to pass a config to constructor function. The config object consists of 
-two properties: newCollisionResolver and newCoordsSystem. If you set both of them to false, then you will use
+three properties: newCollisionResolver, newCoordsSystem and customSorting. If you set all of them to false, then you will use
 not customized version of the library.
 
 The following snippet of code creates custom Sankey:
 ```js
-const config = { newCollisionResolver: true, newCoordsSystem: true };
+const config = { newCollisionResolver: true, newCoordsSystem: true, customSoring: true };
 const sankey = new Sankey(config)
 ```
 

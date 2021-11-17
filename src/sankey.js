@@ -277,8 +277,12 @@ export default function Sankey(config) {
         target.y1 += dy;
         reorderNodeLinks(target);
       }
-      if (!config.newCollisionResolver) {
+
+      if (!config.customSorting) {
         if (sort === undefined) column.sort(ascendingBreadth);
+      }
+
+      if (!config.newCollisionResolver) {
         resolveCollisions(column, beta);
       }
 
@@ -303,9 +307,10 @@ export default function Sankey(config) {
         source.y1 += dy;
         reorderNodeLinks(source);
       }
-
-      if (!config.newCollisionResolver) {
+      if (!config.customSorting) {
         if (sort === undefined) column.sort(ascendingBreadth);
+      }
+      if (!config.newCollisionResolver) {
         resolveCollisions(column, beta);
       }
 
