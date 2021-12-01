@@ -34,7 +34,7 @@ export default [
       }),
       copy({
         targets: [
-          {src: 'src/d3-sankey.d.ts', dest: 'dist'}
+          {src: 'src/d3-sankey.d.ts', dest: 'dist/@vizlib'}
         ]
       })
     ]
