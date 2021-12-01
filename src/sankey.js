@@ -200,13 +200,12 @@ export default function Sankey(config = {
   /**
    * Compute nodes with fixed position
    * @param nodes
-   * @returns {any[]}
    */
   function computeFixedNodeLayer({nodes}) {
-    const d3group = group(nodes, d => d.dimIndex);
+    const groupedNodes = group(nodes, d => d.dimIndex);
     const columnsFlow = [];
 
-    d3group.forEach(el => {
+    groupedNodes.forEach(el => {
       columnsFlow.push(el);
     });
 
@@ -228,7 +227,6 @@ export default function Sankey(config = {
   /**
    * Return columns computed for alignment options
    * @param nodes
-   * @returns {any[]}
    */
   function computeNodeLayers({nodes}) {
     const x = max(nodes, d => d.depth) + 1;
