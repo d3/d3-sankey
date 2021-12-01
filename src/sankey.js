@@ -203,16 +203,15 @@ export default function Sankey(config = {
    */
   function computeFixedNodeLayer({nodes}) {
     const groupedNodes = group(nodes, d => d.dimIndex);
-    const columnsFlow = [];
+    const columns = [];
 
     groupedNodes.forEach(el => {
-      columnsFlow.push(el);
+      columns.push(el);
     });
 
     const x = config.fixedNodeLayerNumber;
     const kx = (x1 - x0 - dx) / (x - 1);
 
-    const columns = [...columnsFlow];
     for (const node of nodes) {
       node.layer = node.dimIndex;
       node.x0 = x0 + node.dimIndex * kx;
