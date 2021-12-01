@@ -1,5 +1,6 @@
 import {terser} from "rollup-plugin-terser";
 import * as meta from "./package.json";
+import copy from 'rollup-plugin-copy'
 
 const config = {
   input: "src/index.js",
@@ -30,6 +31,11 @@ export default [
         output: {
           preamble: config.output.banner
         }
+      }),
+      copy({
+        targets: [
+          {src: 'src/d3-sankey.d.ts', dest: 'dist'}
+        ]
       })
     ]
   }

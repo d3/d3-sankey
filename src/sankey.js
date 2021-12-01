@@ -1,4 +1,4 @@
-import {max, min, sum} from "d3-array";
+import {max, min, sum, group} from "d3-array";
 import {justify} from "./align.js";
 import constant from "./constant.js";
 
@@ -51,7 +51,13 @@ function computeLinkBreadths({nodes}) {
   }
 }
 
-export default function Sankey(config) {
+export default function Sankey(config = {
+  newCollisionResolver: false,
+  newCoordsSystem: false,
+  customSorting: false,
+  fixedNodeLayer: false,
+  fixedNodeLayerNumber: 0,
+}) {
 
   let x0 = 0, y0 = 0, x1 = 1, y1 = 1; // extent
   let dx = 24; // nodeWidth
@@ -191,6 +197,39 @@ export default function Sankey(config) {
     }
   }
 
+  /**
+   * Compute nodes with fixed position
+   * @param nodes
+   * @returns {any[]}
+   */
+  function computeFixedNodeLayer({nodes}) {
+    const d3group = group(nodes, d => d.dimIndex);
+    const columnsFlow = [];
+
+    d3group.forEach(el => {
+      columnsFlow.push(el);
+    });
+
+    const x = config.fixedNodeLayerNumber;
+    const kx = (x1 - x0 - dx) / (x - 1);
+
+    const columns = [...columnsFlow];
+    for (const node of nodes) {
+      node.layer = node.dimIndex;
+      node.x0 = x0 + node.dimIndex * kx;
+      node.x1 = node.x0 + dx;
+    }
+    if (sort) for (const column of columns) {
+      column.sort(sort);
+    }
+    return columns;
+  }
+
+  /**
+   * Return columns computed for alignment options
+   * @param nodes
+   * @returns {any[]}
+   */
   function computeNodeLayers({nodes}) {
     const x = max(nodes, d => d.depth) + 1;
     const kx = (x1 - x0 - dx) / (x - 1);
@@ -232,7 +271,7 @@ export default function Sankey(config) {
   }
 
   function computeNodeBreadths(graph) {
-    const columns = computeNodeLayers(graph);
+    const columns = config.fixedNodeLayer ? computeFixedNodeLayer(graph) : computeNodeLayers(graph);
     py = Math.min(dy, (y1 - y0) / (max(columns, c => c.length) - 1));
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {
@@ -244,7 +283,7 @@ export default function Sankey(config) {
   }
 
   function computeNodeBreadthsCustomVersion(graph) {
-    const columns = computeNodeLayers(graph);
+    const columns = config.fixedNodeLayer ? computeFixedNodeLayer(graph) : computeNodeLayers(graph);
     py = Math.min(dy, (y1 - y0) / (max(columns, c => c.length) - 1));
     initializeNodeBreadths(columns);
     for (let i = 0; i < iterations; ++i) {

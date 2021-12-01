@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "pretest": "rollup -c",
-    "test": "tape 'test/**/*-test.js' && eslint src",
+    "test": "tape 'test/**/*-test.js'",
     "prepublishOnly": "rm -rf dist && yarn test"
   },
   "dependencies": {
@@ -37,6 +37,8 @@
     "eslint": "6",
     "rollup": "1",
     "rollup-plugin-terser": "5",
-    "tape": "4"
+    "rollup-plugin-copy": "^3.4.0",
+    "tape": "4",
+    "d3": "*"
   }
 }
