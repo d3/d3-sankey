@@ -22,7 +22,9 @@
   },
   "files": [
     "dist/**/*.js",
-    "src/**/*.js"
+    "dist/**/*.d.ts",
+    "src/**/*.js",
+    "src/**/*.d.ts"
   ],
   "scripts": {
     "pretest": "rollup -c",
