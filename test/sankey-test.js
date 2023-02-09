@@ -1,11 +1,11 @@
-var tape = require("tape"),
-    d3 = require("../");
+import tape from "tape";
+import {sankey} from "../src/index.js";
 
 tape.skip("sankey(energy) returns the expected results", function(test) {
-  var sankey = d3.sankey().nodeWidth(15).nodePadding(10).extent([[1, 1], [959, 494]]),
-      energy = sankey(require("./energy"));
-  test.deepEqual(energy.nodes.map(nodePosition), require("./energy-nodes"));
-  test.deepEqual(energy.links.map(linkPosition), require("./energy-links"));
+  var sankeyFN = sankey().nodeWidth(15).nodePadding(10).extent([[1, 1], [959, 494]]),
+      energy = sankeyFN(import('./energy.json'));
+  test.deepEqual(energy.nodes.map(nodePosition), import('./energy-nodes.json'));
+  test.deepEqual(energy.links.map(linkPosition), import('./energy-links.json'));
   test.end();
 });
 

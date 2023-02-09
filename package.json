@@ -2,6 +2,7 @@
   "name": "d3-sankey",
   "version": "0.12.3",
   "description": "Visualize flow between nodes in a directed acyclic network.",
+  "type": "module",
   "keywords": [
     "d3",
     "d3-module",
@@ -14,6 +15,11 @@
   "license": "BSD-3-Clause",
   "main": "dist/d3-sankey.js",
   "unpkg": "dist/d3-sankey.min.js",
+  "exports": {
+    "umd": "./dist/d3-sankey.min.js",
+    "default": "./src/index.js"
+  },
+  "sideEffects": false,
   "module": "src/index.js",
   "homepage": "https://github.com/d3/d3-sankey",
   "repository": {
@@ -31,13 +37,16 @@
     "postpublish": "git push && git push --tags && zip -j dist/${npm_package_name}.zip -- LICENSE README.md dist/${npm_package_name}.js dist/${npm_package_name}.min.js"
   },
   "dependencies": {
-    "d3-array": "1 - 2",
-    "d3-shape": "^1.2.0"
+    "d3-array": "^3.2.2",
+    "d3-shape": "^3.2.0"
   },
   "devDependencies": {
     "eslint": "6",
     "rollup": "1",
     "rollup-plugin-terser": "5",
-    "tape": "4"
+    "tape": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=12"
   }
 }
