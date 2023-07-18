@@ -58,7 +58,8 @@ export default function Sankey() {
   let id = defaultId;
   let align = justify;
   let sort;
-  let linkSort;
+  let targetLinkSort;
+  let sourceLinkSort;
   let nodes = defaultNodes;
   let links = defaultLinks;
   let iterations = 6;
@@ -107,8 +108,11 @@ export default function Sankey() {
     return arguments.length ? (links = typeof _ === "function" ? _ : constant(_), sankey) : links;
   };
 
-  sankey.linkSort = function(_) {
-    return arguments.length ? (linkSort = _, sankey) : linkSort;
+  sankey.targetLinkSort = function (_) {
+    return arguments.length ? ((targetLinkSort = _), sankey) : targetLinkSort;
+  };
+  sankey.sourceLinkSort = function (_) {
+    return arguments.length ? ((sourceLinkSort = _), sankey) : sourceLinkSort;
   };
 
   sankey.size = function(_) {
@@ -138,10 +142,14 @@ export default function Sankey() {
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     }
-    if (linkSort != null) {
-      for (const {sourceLinks, targetLinks} of nodes) {
-        sourceLinks.sort(linkSort);
-        targetLinks.sort(linkSort);
+    if (sourceLinkSort != null) {
+      for (const { sourceLinks } of nodes) {
+        sourceLinks.sort(sourceLinkSort);
+      }
+    }
+    if (targetLinkSort != null) {
+      for (const { targetLinks } of nodes) {
+        targetLinks.sort(targetLinkSort);
       }
     }
   }
@@ -317,22 +325,32 @@ export default function Sankey() {
     }
   }
 
-  function reorderNodeLinks({sourceLinks, targetLinks}) {
-    if (linkSort === undefined) {
-      for (const {source: {sourceLinks}} of targetLinks) {
-        sourceLinks.sort(ascendingTargetBreadth);
-      }
-      for (const {target: {targetLinks}} of sourceLinks) {
+  function reorderNodeLinks({ sourceLinks, targetLinks }) {
+    if (targetLinkSort === undefined) {
+      for (const {
+        target: { targetLinks },
+      } of sourceLinks) {
         targetLinks.sort(ascendingSourceBreadth);
+      }
+    }
+    if (sourceLinkSort === undefined) {
+      for (const {
+        source: { sourceLinks },
+      } of targetLinks) {
+        sourceLinks.sort(ascendingTargetBreadth);
       }
     }
   }
 
   function reorderLinks(nodes) {
-    if (linkSort === undefined) {
-      for (const {sourceLinks, targetLinks} of nodes) {
-        sourceLinks.sort(ascendingTargetBreadth);
+    if (targetLinkSort === undefined) {
+      for (const { targetLinks } of nodes) {
         targetLinks.sort(ascendingSourceBreadth);
+      }
+    }
+    if (sourceLinkSort === undefined) {
+      for (const { sourceLinks } of nodes) {
+        sourceLinks.sort(ascendingTargetBreadth);
       }
     }
   }

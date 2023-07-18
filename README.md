@@ -100,9 +100,10 @@ For convenience, a link’s source and target may be initialized using numeric o
 * *link*.width - the link’s width (proportional to *link*.value)
 * *link*.index - the zero-based index of *link* within the array of links
 
-<a name="sankey_linkSort" href="#sankey_linkSort">#</a> <i>sankey</i>.<b>linkSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
-
-If *sort* is specified, sets the link sort method and returns this Sankey generator. If *sort* is not specified, returns the current link sort method, which defaults to *undefined*, indicating that vertical order of links within each node will be determined automatically by the layout. If *sort* is null, the order is fixed by the input. Otherwise, the specified *sort* function determines the order; the function is passed two links, and must return a value less than 0 if the first link should be above the second, and a value greater than 0 if the second link should be above the first, or 0 if the order is not specified.
+<a name="sankey_targetLinkSort" href="#sankey_targetLinkSort">#</a> <i>sankey</i>.<b>targetLinkSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
+<a name="sankey_sourceLinkSort" href="#sankey_sourceLinkSort">#</a> <i>sankey</i>.<b>sourceLinkSort</b>([<i>sort</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")  
+Allows to set a different sorting order for links at source node than at the target node.
+If _sort_ is specified, sets the link sort method and returns this Sankey generator. If _sort_ is not specified, returns the current link sort method, which defaults to _undefined_, indicating that vertical order of links within each node will be determined automatically by the layout. If _sort_ is null, the order is fixed by the input. Otherwise, the specified _sort_ function determines the order; the function is passed two links, and must return a value less than 0 if the first link should be above the second, and a value greater than 0 if the second link should be above the first, or 0 if the order is not specified.
 
 <a name="sankey_nodeId" href="#sankey_nodeId">#</a> <i>sankey</i>.<b>nodeId</b>([<i>id</i>]) [<>](https://github.com/d3/d3-sankey/blob/master/src/sankey.js "Source")
 
