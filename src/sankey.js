@@ -62,6 +62,8 @@ export default function Sankey() {
   let nodes = defaultNodes;
   let links = defaultLinks;
   let iterations = 6;
+  let minNodeHeight;
+  let maxNodeHeight;
 
   function sankey() {
     const graph = {nodes: nodes.apply(null, arguments), links: links.apply(null, arguments)};
@@ -98,6 +100,14 @@ export default function Sankey() {
   sankey.nodePadding = function(_) {
     return arguments.length ? (dy = py = +_, sankey) : dy;
   };
+
+  sankey.minNodeHeight = function (_) {
+    return arguments.length ? ((minNodeHeight = +_), sankey) : minNodeHeight
+  }
+
+  sankey.maxNodeHeight = function (_) {
+    return arguments.length ? ((maxNodeHeight = +_), sankey) : maxNodeHeight
+  }
 
   sankey.nodes = function(_) {
     return arguments.length ? (nodes = typeof _ === "function" ? _ : constant(_), sankey) : nodes;
@@ -213,11 +223,30 @@ export default function Sankey() {
     for (const nodes of columns) {
       let y = y0;
       for (const node of nodes) {
-        node.y0 = y;
-        node.y1 = y + node.value * ky;
-        y = node.y1 + py;
+        node.y0 = y
+        node.y1 = y + node.value * ky
+
+        const nodeHeight = Math.abs(node.y0 - node.y1)
+
+        if (minNodeHeight && nodeHeight < minNodeHeight) {
+          node.y1 = node.y1 + minNodeHeight - nodeHeight
+        }
+
+        let mp = 1
+        if (maxNodeHeight && nodeHeight > maxNodeHeight) {
+          node.y1 = node.y1 - (nodeHeight - maxNodeHeight)
+          mp = nodeHeight / maxNodeHeight
+        }
+
+        y = node.y1 + py
+
         for (const link of node.sourceLinks) {
-          link.width = link.value * ky;
+          link.width = (link.value * ky) / mp
+        }
+        if (mp != 1) {
+          for (const link of node.targetLinks) {
+            link.width = (link.value * ky) / mp
+          }
         }
       }
       y = (y1 - y + py) / (nodes.length + 1);
