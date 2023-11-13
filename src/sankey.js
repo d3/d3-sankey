@@ -235,7 +235,7 @@ export default function Sankey() {
         let mp = 1
         if (maxNodeHeight && nodeHeight > maxNodeHeight) {
           node.y1 = node.y1 - (nodeHeight - maxNodeHeight)
-          mp = nodeHeight / maxNodeHeight
+          mp = (nodeHeight / maxNodeHeight) * ky
         }
 
         y = node.y1 + py
